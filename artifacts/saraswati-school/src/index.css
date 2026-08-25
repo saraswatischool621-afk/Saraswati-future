@@ -258,6 +258,15 @@
 }
 
 @layer base {
+  html, body, #root {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  img, svg {
+    max-width: 100%;
+  }
+
   * {
     @apply border-border;
   }
@@ -301,7 +310,10 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
-@media (max-width: 767px) { .page-wrap { width: min(100% - 1.5rem, 620px); } }
+@media (max-width: 767px) {
+  .page-wrap { width: min(100% - 1.5rem, 620px); }
+  .grain::after { display: none; }
+}
 
 /**
  * Using the elevate system.
