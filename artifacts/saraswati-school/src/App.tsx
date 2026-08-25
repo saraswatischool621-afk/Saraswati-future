@@ -3,6 +3,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Link, Route, Switch, useLocation } from 'wouter';
+import { schoolContent } from './siteContent';
 import {
   ArrowDownRight,
   ArrowRight,
@@ -36,18 +37,23 @@ import {
 } from 'lucide-react';
 import NotFound from '@/pages/not-found';
 
-const schoolLogo = '/school-logo.jpg';
-const schoolAddress = 'P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon';
-const whatsappHref = 'https://wa.me/919975249949?text=Namaste%20Saraswati%20School%2C%20I%20would%20like%20to%20know%20more%20about%20admissions.';
-const whatsappNumber = '919975249949';
+const schoolLogo = schoolContent.identity.logo;
+const schoolAddress = schoolContent.contact.address;
+const whatsappNumber = schoolContent.contact.whatsappNumber;
+const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(schoolContent.contact.whatsappGreeting)}`;
 const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(schoolAddress)}`;
 
-const galleryItems = [
-  { src: '/gallery/sports-band.webp', title: 'Precision, pride, and a steady beat', label: 'Sports Day', text: 'Our students lead with discipline, teamwork and the joy of performing together.' },
-  { src: '/gallery/cultural-performance.webp', title: 'Every voice belongs on stage', label: 'Cultural programme', text: 'Music and dance give young learners a confident language for expression.' },
-  { src: '/gallery/sports-day.webp', title: 'Play is part of growing', label: 'Sports & games', text: 'Outdoor activity builds balance, friendship and a love of moving well.' },
-  { src: '/gallery/team-spirit.webp', title: 'Team spirit, brightly expressed', label: 'School community', text: 'Shared celebration, active play and a proud sense of belonging.' },
-];
+const galleryItems = schoolContent.gallery;
+const facilityIcons = {
+  flask: <FlaskConical />,
+  laptop: <Laptop />,
+  music: <Music2 />,
+} as const;
+const programmeIcons = {
+  sparkles: <Sparkles />,
+  book: <BookOpen />,
+  award: <Award />,
+} as const;
 
 const navItems = [
   { href: '/', label: 'Welcome' },
@@ -62,10 +68,10 @@ function LogoMark({ compact = false }: { compact?: boolean }) {
   return (
     <Link href="/" className={`flex items-center gap-3 group ${compact ? 'max-w-[220px]' : ''}`} data-testid="link-logo-home">
       <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-[#f8eedc] ring-2 ring-[#e3b45b]/50 shadow-sm transition-transform group-hover:rotate-3">
-        <img src={schoolLogo} alt="Saraswati School emblem" className="size-full object-cover" />
+        <img src={schoolLogo} alt={`${schoolContent.identity.shortName} School emblem`} className="size-full object-cover" />
       </span>
       <span className="leading-tight">
-        <span className="block font-display text-[1.45rem] font-bold tracking-tight text-[#f8eedc]">Saraswati</span>
+        <span className="block font-display text-[1.45rem] font-bold tracking-tight text-[#f8eedc]">{schoolContent.identity.shortName}</span>
         <span className="block font-mono-school text-[8px] font-bold uppercase tracking-[.14em] text-[#e3b45b]">Primary English Medium School</span>
       </span>
     </Link>
@@ -78,7 +84,7 @@ function SiteShell({ children }: { children: ReactNode }) {
   return (
     <div className="grain min-h-[100dvh] overflow-hidden">
       <div className="bg-[#e3b45b] px-4 py-2 text-center font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#202337]">
-        <span className="hidden sm:inline">Admissions open for 2026–27&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+        <span className="hidden sm:inline">Admissions open for {schoolContent.identity.academicYear}&nbsp;&nbsp;·&nbsp;&nbsp;</span>
         <Link href="/admissions" className="underline decoration-1 underline-offset-4" data-testid="link-top-admissions">Schedule a school visit</Link>
       </div>
       <header className="relative z-40 bg-[#202337] text-[#f8eedc]">
@@ -92,7 +98,7 @@ function SiteShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
-            <a href="tel:+912572211814" className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-call-header"><Phone size={14} /> 0257-2211814</a>
+            <a href={schoolContent.contact.phoneHref} className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-call-header"><Phone size={14} /> {schoolContent.contact.phone}</a>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-whatsapp-header"><MessageCircle size={14} /> WhatsApp</a>
             <Link href="/admissions" className="flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2.5 text-[12px] font-extrabold text-[#202337] transition-transform hover:-translate-y-0.5" data-testid="link-enquire-header">Enquire now <ArrowDownRight size={15} /></Link>
           </div>
@@ -105,7 +111,7 @@ function SiteShell({ children }: { children: ReactNode }) {
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="block border-b border-white/10 py-3 text-sm font-semibold text-[#f8eedc]" data-testid={`link-mobile-${item.label.toLowerCase()}`}>{item.label}</Link>
             ))}
-            <a href="tel:+912572211814" className="mt-4 flex items-center gap-2 py-2 text-sm text-[#e3b45b]" data-testid="link-call-mobile"><Phone size={15} /> 0257-2211814</a>
+            <a href={schoolContent.contact.phoneHref} className="mt-4 flex items-center gap-2 py-2 text-sm text-[#e3b45b]" data-testid="link-call-mobile"><Phone size={15} /> {schoolContent.contact.phone}</a>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 text-sm text-[#e3b45b]" data-testid="link-whatsapp-mobile"><MessageCircle size={15} /> Chat on WhatsApp</a>
           </nav>
         )}
@@ -113,7 +119,7 @@ function SiteShell({ children }: { children: ReactNode }) {
       <main>{children}</main>
       <Footer />
       <Link href="/admissions" className="fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full bg-[#d95340] px-4 py-3 text-xs font-extrabold text-[#fff8ee] shadow-[0_8px_24px_-8px_rgba(217,83,64,.8)] transition-transform hover:-translate-y-1" data-testid="link-floating-enquire">
-        <Send size={14} /> Enquire for 2026–27
+        <Send size={14} /> Enquire for {schoolContent.identity.academicYear}
       </Link>
     </div>
   );
@@ -126,12 +132,12 @@ function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.3fr_.7fr_.8fr_1fr]">
           <div>
             <LogoMark />
-            <p className="mt-6 max-w-xs text-sm leading-7 text-[#f8eedc]/60">A spirited English-medium school in Jalgaon, nurturing clear minds, kind hearts and curious hands since 1985.</p>
+            <p className="mt-6 max-w-xs text-sm leading-7 text-[#f8eedc]/60">A spirited English-medium school in {schoolContent.identity.location}, nurturing clear minds, kind hearts and curious hands since {schoolContent.identity.founded}.</p>
             <div className="mt-6 flex gap-3">
-              <a href="https://www.instagram.com/saraswatischool2016?igsi=N2szeHhuN214Z3Rp" target="_blank" rel="noopener noreferrer" aria-label="Saraswati School on Instagram" className="grid size-9 place-items-center rounded-full border border-white/15 text-[#e3b45b] hover:bg-white/10" data-testid="link-instagram"><Instagram size={16} /></a>
-              <a href="https://www.facebook.com/share/1EigafJA4U/" target="_blank" rel="noopener noreferrer" aria-label="Saraswati School on Facebook" className="grid size-9 place-items-center rounded-full border border-white/15 font-display text-lg font-bold text-[#e3b45b] hover:bg-white/10" data-testid="link-facebook">f</a>
-              <a href="mailto:lewaedusaraswati@gmail.com" aria-label="Email" className="grid size-9 place-items-center rounded-full border border-white/15 text-[#e3b45b] hover:bg-white/10" data-testid="link-footer-email"><Mail size={16} /></a>
-              <a href="tel:+912572211814" aria-label="Call school" className="grid size-9 place-items-center rounded-full border border-white/15 text-[#e3b45b] hover:bg-white/10" data-testid="link-footer-phone"><Phone size={16} /></a>
+              <a href={schoolContent.contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Saraswati School on Instagram" className="grid size-9 place-items-center rounded-full border border-white/15 text-[#e3b45b] hover:bg-white/10" data-testid="link-instagram"><Instagram size={16} /></a>
+              <a href={schoolContent.contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Saraswati School on Facebook" className="grid size-9 place-items-center rounded-full border border-white/15 font-display text-lg font-bold text-[#e3b45b] hover:bg-white/10" data-testid="link-facebook">f</a>
+              <a href={`mailto:${schoolContent.contact.email}`} aria-label="Email" className="grid size-9 place-items-center rounded-full border border-white/15 text-[#e3b45b] hover:bg-white/10" data-testid="link-footer-email"><Mail size={16} /></a>
+              <a href={schoolContent.contact.phoneHref} aria-label="Call school" className="grid size-9 place-items-center rounded-full border border-white/15 text-[#e3b45b] hover:bg-white/10" data-testid="link-footer-phone"><Phone size={16} /></a>
               <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat with school on WhatsApp" className="grid size-9 place-items-center rounded-full border border-white/15 text-[#e3b45b] hover:bg-white/10" data-testid="link-footer-whatsapp"><MessageCircle size={16} /></a>
             </div>
           </div>
@@ -149,19 +155,19 @@ function Footer() {
             <div className="mt-5 grid gap-3 text-sm text-[#f8eedc]/65">
               <Link href="/mandatory-disclosure" className="hover:text-[#e3b45b]" data-testid="link-mandatory-disclosure">Mandatory Disclosure</Link>
               <Link href="/contact" className="hover:text-[#e3b45b]" data-testid="link-footer-contact">Contact office</Link>
-              <a href="mailto:lewaedusaraswati@gmail.com" className="hover:text-[#e3b45b]" data-testid="link-footer-mail">Write to us</a>
+              <a href={`mailto:${schoolContent.contact.email}`} className="hover:text-[#e3b45b]" data-testid="link-footer-mail">Write to us</a>
             </div>
           </div>
           <div>
             <p className="font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#e3b45b]">Find us</p>
-            <p className="mt-5 text-sm leading-6 text-[#f8eedc]/65">P-52, Ajintha Road, Near Lokmat Office,<br />M.I.D.C. Area, Jalgaon.</p>
+            <p className="mt-5 text-sm leading-6 text-[#f8eedc]/65">{schoolContent.contact.address}</p>
             <a href={directionsHref} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm text-[#f8eedc]/65 hover:text-[#e3b45b]" data-testid="link-footer-directions"><MapPin size={14} /> Get directions</a>
-            <a href="tel:+912572211814" className="mt-4 inline-flex items-center gap-2 text-sm text-[#f8eedc]/65 hover:text-[#e3b45b]"><Phone size={14} /> 0257-2211814</a>
+             <a href={schoolContent.contact.phoneHref} className="mt-4 inline-flex items-center gap-2 text-sm text-[#f8eedc]/65 hover:text-[#e3b45b]"><Phone size={14} /> {schoolContent.contact.phone}</a>
           </div>
         </div>
         <div className="mt-14 flex flex-col justify-between gap-3 border-t border-white/10 pt-6 font-mono-school text-[10px] uppercase tracking-[.12em] text-[#f8eedc]/40 sm:flex-row">
-          <span>© 2026 Saraswati Primary English Medium School</span>
-          <span>Under Lewa Educational Union · State Board</span>
+           <span>© {schoolContent.identity.academicYear.slice(0, 4)} {schoolContent.identity.name}</span>
+           <span>Under {schoolContent.identity.management} · {schoolContent.identity.board}</span>
         </div>
       </div>
     </footer>
@@ -260,12 +266,12 @@ function Home() {
         <div className="page-wrap grid gap-14 lg:grid-cols-[.95fr_1.05fr] lg:items-center">
           <div className="relative z-10 reveal">
             <div className="mb-7 flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#202337] px-3 py-2 font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#e3b45b]"><span className="size-1.5 rounded-full bg-[#e3b45b]" /> State Board School</span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#202337] px-3 py-2 font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#e3b45b]"><span className="size-1.5 rounded-full bg-[#e3b45b]" /> {schoolContent.identity.board} School</span>
               <span className="inline-flex items-center gap-2 rounded-full border border-[#d95340]/30 bg-[#fff8ee]/50 px-3 py-2 font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#c94b35]"><span className="size-1.5 rounded-full bg-[#d95340]" /> Registration open</span>
-              <span className="font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#202337]/50">Est. 1985</span>
+               <span className="font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#202337]/50">Est. {schoolContent.identity.founded}</span>
             </div>
             <h1 className="max-w-3xl font-display text-[clamp(3.35rem,16vw,7.4rem)] font-bold leading-[.82] tracking-[-.06em] text-[#202337]">Where bright<br /><span className="text-[#c94b35]">beginnings</span><br />take root.</h1>
-            <p className="mt-8 max-w-lg text-base leading-7 text-[#202337]/65 md:text-lg">Saraswati Primary English Medium School is a place to be known, challenged and celebrated — right here in the heart of Jalgaon.</p>
+             <p className="mt-8 max-w-lg text-base leading-7 text-[#202337]/65 md:text-lg">{schoolContent.identity.name} is a place to be known, challenged and celebrated — right here in the heart of {schoolContent.identity.location}.</p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Link href="/admissions" className="inline-flex items-center gap-3 rounded-full bg-[#d95340] px-5 py-3.5 text-sm font-extrabold text-[#fff8ee] shadow-lg shadow-[#d95340]/20 transition-transform hover:-translate-y-1" data-testid="link-hero-admissions">Begin your enquiry <ArrowRight size={17} /></Link>
               <Link href="/academics" className="inline-flex items-center gap-2 rounded-full border border-[#202337]/20 px-5 py-3.5 text-sm font-bold text-[#202337] transition-colors hover:bg-[#202337] hover:text-[#f8eedc]" data-testid="link-hero-academics">See the learning journey</Link>
@@ -274,7 +280,7 @@ function Home() {
           <div className="relative min-h-[440px] reveal reveal-2 md:min-h-[540px]">
             <HomeGallery />
             <div className="absolute bottom-24 right-0 z-10 grid size-28 place-items-center rounded-full bg-[#e3b45b] text-center text-[#202337] shadow-lg md:size-36">
-              <span><span className="block font-display text-4xl font-bold leading-none">40</span><span className="font-mono-school text-[9px] font-bold uppercase tracking-wider">years of<br />belonging</span></span>
+               <span><span className="block font-display text-4xl font-bold leading-none">{new Date().getFullYear() - Number(schoolContent.identity.founded)}</span><span className="font-mono-school text-[9px] font-bold uppercase tracking-wider">years of<br />belonging</span></span>
             </div>
           </div>
         </div>
@@ -284,21 +290,16 @@ function Home() {
       </div>
       <section className="bg-[#f8eedc] px-5 py-20 md:py-28">
         <div className="page-wrap grid gap-14 lg:grid-cols-[.85fr_1.15fr]">
-          <SectionHeading eyebrow="About Us" title="Education that helps every child flourish." copy="Saraswati Primary English Medium School is a premier educational institution run under the aegis of Lewa Educational Union (Reg. No. A-410, Jalgaon). Committed to nurturing young minds in a safe, vibrant, and supportive environment, our school proudly caters to over 850 students with the support of a dedicated team of more than 40 experienced teachers. We are equipped with modern learning infrastructure, including a well-designed Science lab, a modern Computer lab, and dedicated music and dance rooms to foster technical skills and creative expression. With comprehensive facilities for both indoor and outdoor sports, we ensure a balanced blend of academic excellence, holistic growth, and physical well-being for every child." />
+           <SectionHeading eyebrow="About Us" title="Education that helps every child flourish." copy={schoolContent.about.description} />
           <div className="grid gap-5 sm:grid-cols-2">
-            {[
-              ['01', 'Know every learner', 'Small acts of attention make room for brave questions and steady progress.'],
-              ['02', 'Learn by doing', 'From a seed in the science lab to a rhythm in the music room, ideas become real.'],
-              ['03', 'Grow together', 'Families, teachers and children are partners in the work of becoming.'],
-              ['04', 'Stand tall locally', 'Proud of Jalgaon, open to the world — our roots make our horizons wider.'],
-            ].map(([num, title, copy]) => <div key={num} className="rounded-[1.5rem] border border-[#202337]/12 bg-[#f4e6c9] p-6 transition-transform hover:-translate-y-1"><span className="font-mono-school text-[10px] font-bold text-[#c94b35]">{num}</span><h3 className="mt-8 font-display text-3xl font-bold text-[#202337]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#202337]/60">{copy}</p></div>)}
+             {schoolContent.about.values.map(([num, title, copy]) => <div key={num} className="rounded-[1.5rem] border border-[#202337]/12 bg-[#f4e6c9] p-6 transition-transform hover:-translate-y-1"><span className="font-mono-school text-[10px] font-bold text-[#c94b35]">{num}</span><h3 className="mt-8 font-display text-3xl font-bold text-[#202337]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#202337]/60">{copy}</p></div>)}
           </div>
         </div>
       </section>
       <section className="bg-[#d95340] px-5 py-14 text-[#fff8ee]">
         <div className="page-wrap grid gap-8 md:grid-cols-4 md:items-center">
           <div><p className="font-mono-school text-[10px] uppercase tracking-[.16em] text-[#f8eedc]/65">The numbers behind the warmth</p><p className="mt-2 font-display text-3xl font-bold">A living school.</p></div>
-          {[['850+', 'students'], ['40+', 'teachers'], ['1985', 'founded'], ['1', 'shared purpose']].map(([num, label]) => <div key={label} className="border-l border-[#fff8ee]/25 pl-5"><p className="font-display text-5xl font-bold">{num}</p><p className="font-mono-school mt-1 text-[10px] uppercase tracking-[.15em] text-[#fff8ee]/65">{label}</p></div>)}
+           {schoolContent.about.stats.map(([num, label]) => <div key={label} className="border-l border-[#fff8ee]/25 pl-5"><p className="font-display text-5xl font-bold">{num}</p><p className="font-mono-school mt-1 text-[10px] uppercase tracking-[.15em] text-[#fff8ee]/65">{label}</p></div>)}
         </div>
       </section>
       <section className="bg-[#e3b45b] px-5 py-14 text-[#202337]">
@@ -309,7 +310,7 @@ function Home() {
             <p className="mt-3 max-w-xl text-sm leading-6 text-[#202337]/70">Call or message us on WhatsApp for admissions, campus visits, fees, or any help your family needs.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a href="tel:+912572211814" className="inline-flex w-fit items-center gap-3 rounded-full bg-[#202337] px-6 py-4 text-sm font-extrabold text-[#f8eedc] shadow-lg shadow-[#202337]/15 transition-transform hover:-translate-y-1" data-testid="link-call-now-home"><Phone size={18} /> Call now · 0257-2211814</a>
+             <a href={schoolContent.contact.phoneHref} className="inline-flex w-fit items-center gap-3 rounded-full bg-[#202337] px-6 py-4 text-sm font-extrabold text-[#f8eedc] shadow-lg shadow-[#202337]/15 transition-transform hover:-translate-y-1" data-testid="link-call-now-home"><Phone size={18} /> Call now · {schoolContent.contact.phone}</a>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex w-fit items-center gap-3 rounded-full border-2 border-[#202337]/30 px-6 py-4 text-sm font-extrabold text-[#202337] transition-transform hover:-translate-y-1 hover:bg-[#f8eedc]/45" data-testid="link-whatsapp-home"><MessageCircle size={18} /> WhatsApp us</a>
           </div>
         </div>
@@ -318,9 +319,7 @@ function Home() {
         <div className="page-wrap">
           <SectionHeading eyebrow="Spaces that invite possibility" title="The best lessons don't always happen at a desk." copy="Our facilities are designed for movement, making and music — bright corners where children can follow a question all the way through." light />
           <div className="mt-14 grid gap-4 md:grid-cols-12">
-            <FacilityCard className="md:col-span-7 md:min-h-[310px]" icon={<FlaskConical />} title="Science Lab" copy="Observe, test, wonder and try again." tone="saffron" />
-            <FacilityCard className="md:col-span-5 md:min-h-[310px]" icon={<Laptop />} title="Computer Lab" copy="Digital fluency with a human touch." tone="teal" />
-            <FacilityCard className="md:col-span-5" icon={<Music2 />} title="Music & Dance Rooms" copy="A beat, a breath, a brave first performance." tone="coral" />
+             {schoolContent.facilities.map((facility, index) => <FacilityCard key={facility.title} className={index === 0 ? 'md:col-span-7 md:min-h-[310px]' : index === 1 ? 'md:col-span-5 md:min-h-[310px]' : 'md:col-span-5'} icon={facilityIcons[facility.icon]} title={facility.title} copy={facility.copy} tone={facility.tone} />)}
             <div className="relative min-h-[220px] overflow-hidden rounded-[1.8rem] bg-[#f4e6c9] p-7 text-[#202337] md:col-span-7"><div className="absolute -right-8 -top-12 size-44 rounded-full border-[28px] border-[#d95340]/25" /><div className="relative flex h-full flex-col justify-between"><School size={28} className="text-[#c94b35]" /><div><p className="font-mono-school text-[10px] uppercase tracking-[.15em] text-[#202337]/50">More to explore</p><p className="mt-2 max-w-sm font-display text-3xl font-bold">A campus that feels like it belongs to children.</p></div></div></div>
           </div>
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -342,16 +341,12 @@ function FacilityCard({ icon, title, copy, tone, className = '' }: { icon: React
 }
 
 function Academics() {
-  const programs = [
-    { num: '01', name: 'Pre-Primary', ages: 'Foundations · Nursery to UKG', color: 'bg-[#e3b45b]', icon: <Sparkles />, copy: 'A gentle, joyful start where play is purposeful and every new word, shape and friendship matters.', points: ['English', 'Maths', 'Marathi', 'EVS', 'Hindi Rhymes', 'Art & Craft', 'Educational Toys', 'Audio-visual learning', 'Storytelling', 'Etiquette training'] },
-    { num: '02', name: 'Primary', ages: 'Classes 1–4', color: 'bg-[#3b7f7c] text-[#f8eedc]', icon: <BookOpen />, copy: 'Children build strong foundations in English, Mathematics, EVS and the creative arts — with the confidence to ask why.', points: ['English', 'Hindi', 'Marathi', 'Mathematics', 'General Science', 'EVS', 'Drawing', 'Work Experience', 'Computer', 'GK', 'Physical Education', 'Fine Arts', 'Yoga / Meditation'] },
-    { num: '03', name: 'Middle School', ages: 'Classes 5–10', color: 'bg-[#d95340] text-[#fff8ee]', icon: <Award />, copy: 'A wider world opens up. Subject depth, thoughtful mentors and real responsibilities prepare students for the State Board journey ahead.', points: ['English', 'Hindi', 'Marathi', 'Maths', 'Science', 'SST / EVS', 'Work Experience', 'Computer', 'Life Skills', 'Dramatization', 'Environment Studies'] },
-  ];
+  const programmeStyles = { saffron: 'bg-[#e3b45b]', teal: 'bg-[#3b7f7c] text-[#f8eedc]', coral: 'bg-[#d95340] text-[#fff8ee]' };
   return <>
     <PageIntro eyebrow="The learning journey" title={<>Room to<br /><span className="text-[#e3b45b]">become.</span></>} copy="From first letters to future plans, our programmes meet children where they are and give them the right kind of stretch.">
       <Link href="/admissions" className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#e3b45b] hover:text-[#f8eedc]" data-testid="link-academics-enquire">Ask about a class <ArrowRight size={16} /></Link>
     </PageIntro>
-    <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="A clear path, a personal pace" title="Three chapters. One continuous curiosity." copy="Our age-wise programmes are connected by a shared language of care, high expectations and hands-on learning." /><div className="mt-14 grid gap-5 lg:grid-cols-3">{programs.map((p) => <article key={p.num} className={`group relative min-h-[470px] overflow-hidden rounded-[2rem] p-7 ${p.color} transition-transform hover:-translate-y-2`}><div className="flex items-start justify-between"><span className="font-mono-school text-[10px] font-bold opacity-60">{p.num}</span><span className="grid size-12 place-items-center rounded-2xl border border-current/20">{p.icon}</span></div><div className="absolute -right-14 top-24 size-48 rounded-full border-[30px] border-current opacity-10" /><div className="relative mt-28"><p className="font-mono-school text-[9px] font-bold uppercase tracking-[.14em] opacity-65">{p.ages}</p><h3 className="mt-3 font-display text-5xl font-bold leading-[.88]">{p.name}</h3><p className="mt-5 text-sm leading-6 opacity-75">{p.copy}</p><ul className="mt-7 grid gap-2 border-t border-current/20 pt-5 text-xs font-semibold">{p.points.map(point => <li key={point} className="flex items-center gap-2"><Check size={14} /> {point}</li>)}</ul></div></article>)}</div></div></section>
+     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="A clear path, a personal pace" title="Three chapters. One continuous curiosity." copy="Our age-wise programmes are connected by a shared language of care, high expectations and hands-on learning." /><div className="mt-14 grid gap-5 lg:grid-cols-3">{schoolContent.programmes.map((p) => <article key={p.num} className={`group relative min-h-[470px] overflow-hidden rounded-[2rem] p-7 ${programmeStyles[p.tone]} transition-transform hover:-translate-y-2`}><div className="flex items-start justify-between"><span className="font-mono-school text-[10px] font-bold opacity-60">{p.num}</span><span className="grid size-12 place-items-center rounded-2xl border border-current/20">{programmeIcons[p.icon]}</span></div><div className="absolute -right-14 top-24 size-48 rounded-full border-[30px] border-current opacity-10" /><div className="relative mt-28"><p className="font-mono-school text-[9px] font-bold uppercase tracking-[.14em] opacity-65">{p.ages}</p><h3 className="mt-3 font-display text-5xl font-bold leading-[.88]">{p.name}</h3><p className="mt-5 text-sm leading-6 opacity-75">{p.copy}</p><ul className="mt-7 grid gap-2 border-t border-current/20 pt-5 text-xs font-semibold">{p.points.map(point => <li key={point} className="flex items-center gap-2"><Check size={14} /> {point}</li>)}</ul></div></article>)}</div></div></section>
     <section className="bg-[#f4e6c9] px-5 py-20 md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.7fr_1.3fr]"><SectionHeading eyebrow="Beyond the timetable" title="The habits that last." copy="We make space for the whole child: the thoughtful teammate, the expressive artist, the careful observer and the steady friend." /><div className="grid gap-3 sm:grid-cols-2">{[['01', 'English communication', 'Read deeply. Speak clearly. Listen generously.'], ['02', 'Creative expression', 'Music, dance, drawing and drama as daily languages.'], ['03', 'Scientific temper', 'Questions are welcome; evidence is even better.'], ['04', 'Community spirit', 'Service, celebration and responsibility close to home.']].map(([n, t, c]) => <div key={n} className="flex gap-5 border-b border-[#202337]/15 py-5"><span className="font-mono-school text-[10px] text-[#c94b35]">{n}</span><div><h3 className="font-bold text-[#202337]">{t}</h3><p className="mt-1 text-sm leading-6 text-[#202337]/60">{c}</p></div></div>)}</div></div></section>
     <section className="bg-[#202337] px-5 py-20 text-[#f8eedc]"><div className="page-wrap flex flex-col justify-between gap-8 md:flex-row md:items-end"><div><p className="font-mono-school text-[10px] uppercase tracking-[.18em] text-[#e3b45b]">Ready when you are</p><h2 className="mt-4 max-w-2xl font-display text-5xl font-bold leading-[.9] md:text-7xl">Find the right<br />starting point.</h2></div><Link href="/admissions" className="inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-5 py-3.5 text-sm font-extrabold text-[#202337]" data-testid="link-academics-cta">Explore admissions <ArrowRight size={16} /></Link></div></section>
   </>;
@@ -364,7 +359,7 @@ function Admissions() {
   const sendEnquiry = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const message = [
-      'Namaste Saraswati School,',
+      `Namaste ${schoolContent.identity.shortName} School,`,
       '',
       'I would like to enquire about admissions.',
       '',
@@ -379,8 +374,8 @@ function Admissions() {
     setStatus('ready');
   };
   return <>
-    <PageIntro eyebrow="Admissions · 2026–27" title={<>Start with a<br /><span className="text-[#d95340]">conversation.</span></>} copy="Choosing a school is personal. Our admissions team is here to answer the practical questions and help you picture your child’s day with us." />
-    <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.8fr_1.2fr]"><div><SectionHeading eyebrow="Good to know" title="The details, made clear." copy="Keep these essentials close as you plan your next step. We look forward to meeting your family." /><div className="mt-10 grid gap-3"><InfoRow icon={<CalendarDays />} title="Registration deadlines" text="End of April for Pre-Primary; end of May for Classes 1st to 9th & 11th." /><InfoRow icon={<Clock3 />} title="Meeting hours" text="Principal: 10:00 AM–11:00 AM on working days or by appointment. Teachers: Saturdays after school hours." /><InfoRow icon={<MapPin />} title="Visit the campus" text="P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon." /></div></div><div className="rounded-[2rem] bg-[#f4e6c9] p-7 md:p-10"><div className="flex items-start justify-between gap-5"><div><p className="font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#c77a22]">Before you visit</p><h2 className="mt-3 font-display text-4xl font-bold text-[#202337]">Bring these along.</h2></div><div className="grid size-12 place-items-center rounded-2xl bg-[#202337] text-[#e3b45b]"><Table2 size={20} /></div></div><div className="mt-8 grid gap-3">{['Original Birth Certificate / Transfer Certificate (T.C./L.C.)', 'Parent & Child Identity Proof Xerox (1 copy)', "Father's Caste Certificate Xerox (1 copy)", '1 passport-size photo each (parent & child)', 'Previous school marksheet'].map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-[#202337]/10 bg-[#f8eedc]/70 p-3 text-sm text-[#202337]/75"><CircleCheck size={16} className="mt-0.5 shrink-0 text-[#3b7f7c]" />{item}</div>)}</div><p className="mt-6 text-xs leading-5 text-[#202337]/50">Please bring originals for verification. The office team will guide you through the remaining steps.</p></div></div></section>
+     <PageIntro eyebrow={`Admissions · ${schoolContent.identity.academicYear}`} title={<>Start with a<br /><span className="text-[#d95340]">conversation.</span></>} copy="Choosing a school is personal. Our admissions team is here to answer the practical questions and help you picture your child’s day with us." />
+     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.8fr_1.2fr]"><div><SectionHeading eyebrow="Good to know" title="The details, made clear." copy="Keep these essentials close as you plan your next step. We look forward to meeting your family." /><div className="mt-10 grid gap-3"><InfoRow icon={<CalendarDays />} title="Registration deadlines" text={schoolContent.admissions.deadlines} /><InfoRow icon={<Clock3 />} title="Meeting hours" text={`${schoolContent.contact.meetingHours.principal} on ${schoolContent.contact.meetingHours.office}. ${schoolContent.contact.meetingHours.teachers}.`} /><InfoRow icon={<MapPin />} title="Visit the campus" text={schoolContent.contact.address} /></div></div><div className="rounded-[2rem] bg-[#f4e6c9] p-7 md:p-10"><div className="flex items-start justify-between gap-5"><div><p className="font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#c77a22]">Before you visit</p><h2 className="mt-3 font-display text-4xl font-bold text-[#202337]">Bring these along.</h2></div><div className="grid size-12 place-items-center rounded-2xl bg-[#202337] text-[#e3b45b]"><Table2 size={20} /></div></div><div className="mt-8 grid gap-3">{schoolContent.admissions.requiredDocuments.map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-[#202337]/10 bg-[#f8eedc]/70 p-3 text-sm text-[#202337]/75"><CircleCheck size={16} className="mt-0.5 shrink-0 text-[#3b7f7c]" />{item}</div>)}</div><p className="mt-6 text-xs leading-5 text-[#202337]/50">{schoolContent.admissions.visitNote}</p></div></div></section>
      <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc] md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.72fr_1.28fr]"><div><p className="font-mono-school text-[10px] uppercase tracking-[.18em] text-[#e3b45b]">Your first step</p><h2 className="mt-4 font-display text-5xl font-bold leading-[.9] md:text-7xl">Tell us a little<br />about your family.</h2><p className="mt-6 max-w-sm text-sm leading-6 text-[#f8eedc]/65">Share a few details and we’ll open WhatsApp with a ready-to-send message addressed to the school admissions team.</p></div><div className="rounded-[2rem] bg-[#f8eedc] p-6 text-[#202337] md:p-9">{status === 'ready' ? <div className="flex min-h-[410px] flex-col items-center justify-center text-center"><div className="grid size-16 place-items-center rounded-full bg-[#3b7f7c] text-[#f8eedc]"><MessageCircle size={30} /></div><h2 className="mt-6 font-display text-5xl font-bold">WhatsApp is ready.</h2><p className="mt-4 max-w-sm text-sm leading-6 text-[#202337]/60">Your enquiry details are pre-filled in WhatsApp. Tap send there to complete your message to the school.</p><button type="button" onClick={() => setStatus('idle')} className="mt-7 font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#c94b35] underline underline-offset-4" data-testid="button-submit-another">Edit enquiry</button></div> : <form onSubmit={sendEnquiry} className="grid gap-5"><div className="grid gap-5 sm:grid-cols-2"><label className="grid gap-2 text-xs font-bold">Student name<input required name="student" value={form.student} onChange={update('student')} placeholder="Child's full name" className="school-input" data-testid="input-student-name" /></label><label className="grid gap-2 text-xs font-bold">Parent / guardian name<input required name="parent" value={form.parent} onChange={update('parent')} placeholder="Your full name" className="school-input" data-testid="input-parent-name" /></label></div><div className="grid gap-5 sm:grid-cols-2"><label className="grid gap-2 text-xs font-bold">Parent contact<input required name="phone" type="tel" value={form.phone} onChange={update('phone')} placeholder="+91 00000 00000" className="school-input" data-testid="input-phone" /></label><label className="grid gap-2 text-xs font-bold">Email address<input required name="email" type="email" value={form.email} onChange={update('email')} placeholder="you@example.com" className="school-input" data-testid="input-email" /></label></div><label className="grid gap-2 text-xs font-bold">Grade applying for<select required name="className" value={form.className} onChange={update('className')} className="school-input" data-testid="select-class"><option value="">Choose a grade</option><option>Pre-Primary</option><option>Class 1–4</option><option>Class 5–10</option></select></label><label className="grid gap-2 text-xs font-bold">Message<textarea name="message" value={form.message} onChange={update('message')} rows={4} placeholder="Tell us how we can help..." className="school-input resize-none" /></label><button type="submit" className="inline-flex w-fit items-center gap-2 rounded-full bg-[#d95340] px-5 py-3.5 text-sm font-extrabold text-[#fff8ee] transition-transform hover:-translate-y-0.5" data-testid="button-submit-enquiry">Open WhatsApp enquiry <MessageCircle size={16} /></button><p className="text-[11px] text-[#202337]/45">Your details stay in this form until you choose to open WhatsApp. Nothing is sent to a website backend.</p></form>}</div></div></section>
   </>;
 }
@@ -390,13 +385,9 @@ function InfoRow({ icon, title, text }: { icon: ReactNode; title: string; text: 
 }
 
 function Fees() {
-  const rows = [
-    ['Nursery to Class 4th', '₹ 3,010', '₹ 3,010', '₹ 3,010', '₹ 3,010', '₹ 12,040'],
-    ['Class 5th to Class 10th', '₹ 3,750', '₹ 3,750', '₹ 3,750', '₹ 3,750', '₹ 15,000'],
-  ];
   return <>
-    <PageIntro eyebrow="Fees · 2026–27" title={<>A clear view<br /><span className="text-[#e3b45b]">of the year.</span></>} copy="We keep our fee structure straightforward, with quarterly planning that helps families make confident decisions." />
-    <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><div className="flex flex-col justify-between gap-8 md:flex-row md:items-end"><SectionHeading eyebrow="Quarterly fee comparison" title="Plan the year with ease." copy="The schedule below shows the standard academic fee by programme. Please contact the office for the latest admission and transport details." /><span className="inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2 font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#202337]"><CalendarDays size={14} /> 2026–27</span></div><div className="mt-12 overflow-x-auto rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9]"><table className="w-full min-w-[720px] border-collapse text-left" data-testid="table-fees"><thead><tr className="border-b border-[#202337]/15 font-mono-school text-[10px] uppercase tracking-[.12em] text-[#202337]/55"><th className="px-6 py-5">Programme</th><th className="px-4 py-5">Quarter 1</th><th className="px-4 py-5">Quarter 2</th><th className="px-4 py-5">Quarter 3</th><th className="px-4 py-5">Quarter 4</th><th className="px-6 py-5 text-[#c94b35]">Annual total</th></tr></thead><tbody>{rows.map((row, i) => <tr key={row[0]} className={`border-b border-[#202337]/10 text-sm last:border-0 ${i === 1 ? 'bg-[#e3b45b]/20' : ''}`}><th className="px-6 py-6 font-bold">{row[0]}</th>{row.slice(1).map((cell, index) => <td key={cell + index} className={`px-4 py-6 ${index === 4 ? 'px-6 font-extrabold text-[#c94b35]' : 'text-[#202337]/65'}`}>{cell}</td>)}</tr>)}</tbody></table></div><div className="mt-5 flex gap-3 text-xs leading-5 text-[#202337]/55"><span className="mt-0.5 grid size-4 shrink-0 place-items-center rounded-full bg-[#3b7f7c] text-[#f8eedc]"><Check size={10} /></span><p>Fees are payable at the beginning of each quarter. Books, uniform, transport and optional activities are charged separately where applicable.</p></div></div></section>
+     <PageIntro eyebrow={`Fees · ${schoolContent.identity.academicYear}`} title={<>A clear view<br /><span className="text-[#e3b45b]">of the year.</span></>} copy="We keep our fee structure straightforward, with quarterly planning that helps families make confident decisions." />
+     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><div className="flex flex-col justify-between gap-8 md:flex-row md:items-end"><SectionHeading eyebrow="Quarterly fee comparison" title="Plan the year with ease." copy="The schedule below shows the standard academic fee by programme. Please contact the office for the latest admission and transport details." /><span className="inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2 font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#202337]"><CalendarDays size={14} /> {schoolContent.identity.academicYear}</span></div><div className="mt-12 overflow-x-auto rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9]"><table className="w-full min-w-[720px] border-collapse text-left" data-testid="table-fees"><thead><tr className="border-b border-[#202337]/15 font-mono-school text-[10px] uppercase tracking-[.12em] text-[#202337]/55"><th className="px-6 py-5">Programme</th>{schoolContent.fees.columns.map(column => <th key={column} className={`px-4 py-5 ${column === 'Annual total' ? 'text-[#c94b35]' : ''}`}>{column}</th>)}</tr></thead><tbody>{schoolContent.fees.rows.map((row, i) => <tr key={row.programme} className={`border-b border-[#202337]/10 text-sm last:border-0 ${i === 1 ? 'bg-[#e3b45b]/20' : ''}`}><th className="px-6 py-6 font-bold">{row.programme}</th>{row.quarters.map((cell, index) => <td key={cell + index} className="px-4 py-6 text-[#202337]/65">{cell}</td>)}<td className="px-6 py-6 font-extrabold text-[#c94b35]">{row.annualTotal}</td></tr>)}</tbody></table></div><div className="mt-5 flex gap-3 text-xs leading-5 text-[#202337]/55"><span className="mt-0.5 grid size-4 shrink-0 place-items-center rounded-full bg-[#3b7f7c] text-[#f8eedc]"><Check size={10} /></span><p>{schoolContent.fees.note}</p></div></div></section>
     <section className="bg-[#f4e6c9] px-5 py-20 md:py-24"><div className="page-wrap grid gap-4 md:grid-cols-3"><div className="rounded-[1.7rem] bg-[#202337] p-7 text-[#f8eedc] md:col-span-2"><p className="font-mono-school text-[10px] uppercase tracking-[.16em] text-[#e3b45b]">Need a closer number?</p><h2 className="mt-4 max-w-xl font-display text-4xl font-bold leading-[.95]">Our office will walk you through the full picture.</h2><Link href="/contact" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-5 py-3 text-sm font-bold text-[#202337]" data-testid="link-fees-contact">Talk to the office <ArrowRight size={15} /></Link></div><div className="rounded-[1.7rem] bg-[#d95340] p-7 text-[#fff8ee]"><HeartHandshake size={28} /><p className="mt-16 font-display text-3xl font-bold leading-none">No surprises.<br />Just support.</p></div></div></section>
   </>;
 }
@@ -415,8 +406,8 @@ function Contact() {
   const [mapOpen, setMapOpen] = useState(false);
   return <>
     <PageIntro eyebrow="Come by, call, write" title={<>Let's make<br /><span className="text-[#e3b45b]">it real.</span></>} copy="The best way to know Saraswati is to visit. Our office team is ready with directions, answers and a cup of time." />
-    <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.72fr_1.28fr]"><div><SectionHeading eyebrow="The school office" title="We are easy to find." copy="Reach out in the way that suits your family. We will get back to you during meeting hours." /><div className="mt-10 grid gap-5"><ContactLine icon={<MapPin />} label="Address" content={<><span>{schoolAddress}</span><a href={directionsHref} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1.5 font-bold text-[#c94b35] hover:underline" data-testid="link-contact-directions">Get directions <ArrowRight size={14} /></a></>} /><ContactLine icon={<Phone />} label="Phone" content={<a href="tel:+912572211814" className="hover:text-[#c94b35]" data-testid="link-contact-phone">0257-2211814</a>} /><ContactLine icon={<MessageCircle />} label="WhatsApp" content={<a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="hover:text-[#c94b35]" data-testid="link-contact-whatsapp">+91 99752 49949</a>} /><ContactLine icon={<Mail />} label="Email" content={<a href="mailto:lewaedusaraswati@gmail.com" className="hover:text-[#c94b35]" data-testid="link-contact-email">lewaedusaraswati@gmail.com</a>} /><ContactLine icon={<Clock3 />} label="Meeting hours" content={<>Principal: 10:00 AM–11:00 AM<br />Working days or by appointment</>} /></div></div><div><div className={`relative min-h-[440px] overflow-hidden rounded-[2rem] bg-[#d9c59b] ${mapOpen ? 'ring-4 ring-[#e3b45b]' : ''}`}><div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'linear-gradient(30deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c), linear-gradient(150deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c), linear-gradient(30deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c), linear-gradient(150deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c)', backgroundPosition: '0 0, 0 0, 20px 35px, 20px 35px', backgroundSize: '40px 70px' }} /><div className="absolute inset-0 bg-[#f4e6c9]/40" /><div className="absolute left-[58%] top-[37%] grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-[#fff8ee]/80 bg-[#d95340] text-[#fff8ee] shadow-xl"><MapPin size={29} fill="currentColor" /></div><div className="absolute bottom-0 left-0 right-0 flex flex-col justify-between gap-4 bg-[#202337]/95 p-6 text-[#f8eedc] sm:flex-row sm:items-end"><div><p className="font-mono-school text-[9px] uppercase tracking-[.14em] text-[#e3b45b]">School location</p><p className="mt-2 font-display text-2xl font-bold">Saraswati Primary English Medium School</p><p className="mt-1 text-xs text-[#f8eedc]/55">P-52, Ajintha Road · Jalgaon</p></div><div className="flex flex-wrap gap-2"><a href={directionsHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2 text-xs font-bold text-[#202337]" data-testid="link-map-directions">Navigate <ArrowRight size={14} /></a><button type="button" onClick={() => setMapOpen(!mapOpen)} className="inline-flex items-center gap-2 rounded-full border border-[#f8eedc]/20 px-4 py-2 text-xs font-bold hover:bg-white/10" data-testid="button-map-toggle">{mapOpen ? 'Close preview' : 'Open preview'} <ChevronDown size={14} className={mapOpen ? 'rotate-180' : ''} /></button></div></div></div><p className="mt-4 text-xs leading-5 text-[#202337]/50">Use Navigate to open Google Maps with this school address already selected.</p></div></div></section>
-    <section className="bg-[#e3b45b] px-5 py-16"><div className="page-wrap flex flex-col justify-between gap-7 md:flex-row md:items-center"><div><p className="font-mono-school text-[10px] uppercase tracking-[.16em] text-[#202337]/60">Stay in the loop</p><h2 className="mt-3 font-display text-4xl font-bold text-[#202337]">Follow our school days.</h2></div><div className="flex flex-wrap gap-3"><a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#202337] px-5 py-3 text-sm font-bold text-[#f8eedc]" data-testid="link-contact-whatsapp-cta"><MessageCircle size={16} /> WhatsApp</a><a href="https://www.instagram.com/saraswatischool2016?igsi=N2szeHhuN214Z3Rp" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#202337]/25 px-5 py-3 text-sm font-bold text-[#202337]" data-testid="link-contact-instagram"><Instagram size={16} /> Instagram</a><a href="https://www.facebook.com/share/1EigafJA4U/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#202337]/25 px-5 py-3 text-sm font-bold text-[#202337]" data-testid="link-contact-facebook">Facebook</a><a href="tel:+912572211814" className="inline-flex items-center gap-2 rounded-full border border-[#202337]/25 px-5 py-3 text-sm font-bold text-[#202337]" data-testid="link-contact-call"><Phone size={15} /> Call now</a></div></div></section>
+     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.72fr_1.28fr]"><div><SectionHeading eyebrow="The school office" title="We are easy to find." copy="Reach out in the way that suits your family. We will get back to you during meeting hours." /><div className="mt-10 grid gap-5"><ContactLine icon={<MapPin />} label="Address" content={<><span>{schoolAddress}</span><a href={directionsHref} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1.5 font-bold text-[#c94b35] hover:underline" data-testid="link-contact-directions">Get directions <ArrowRight size={14} /></a></>} /><ContactLine icon={<Phone />} label="Phone" content={<a href={schoolContent.contact.phoneHref} className="hover:text-[#c94b35]" data-testid="link-contact-phone">{schoolContent.contact.phone}</a>} /><ContactLine icon={<MessageCircle />} label="WhatsApp" content={<a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="hover:text-[#c94b35]" data-testid="link-contact-whatsapp">{schoolContent.contact.whatsappDisplay}</a>} /><ContactLine icon={<Mail />} label="Email" content={<a href={`mailto:${schoolContent.contact.email}`} className="hover:text-[#c94b35]" data-testid="link-contact-email">{schoolContent.contact.email}</a>} /><ContactLine icon={<Clock3 />} label="Meeting hours" content={<>{schoolContent.contact.meetingHours.principal}<br />{schoolContent.contact.meetingHours.office}</>} /></div></div><div><div className={`relative min-h-[440px] overflow-hidden rounded-[2rem] bg-[#d9c59b] ${mapOpen ? 'ring-4 ring-[#e3b45b]' : ''}`}><div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'linear-gradient(30deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c), linear-gradient(150deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c), linear-gradient(30deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c), linear-gradient(150deg, #3b7f7c 12%, transparent 12.5%, transparent 87%, #3b7f7c 87.5%, #3b7f7c)', backgroundPosition: '0 0, 0 0, 20px 35px, 20px 35px', backgroundSize: '40px 70px' }} /><div className="absolute inset-0 bg-[#f4e6c9]/40" /><div className="absolute left-[58%] top-[37%] grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-[#fff8ee]/80 bg-[#d95340] text-[#fff8ee] shadow-xl"><MapPin size={29} fill="currentColor" /></div><div className="absolute bottom-0 left-0 right-0 flex flex-col justify-between gap-4 bg-[#202337]/95 p-6 text-[#f8eedc] sm:flex-row sm:items-end"><div><p className="font-mono-school text-[9px] uppercase tracking-[.14em] text-[#e3b45b]">School location</p><p className="mt-2 font-display text-2xl font-bold">{schoolContent.identity.name}</p><p className="mt-1 text-xs text-[#f8eedc]/55">{schoolContent.contact.shortAddress}</p></div><div className="flex flex-wrap gap-2"><a href={directionsHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2 text-xs font-bold text-[#202337]" data-testid="link-map-directions">Navigate <ArrowRight size={14} /></a><button type="button" onClick={() => setMapOpen(!mapOpen)} className="inline-flex items-center gap-2 rounded-full border border-[#f8eedc]/20 px-4 py-2 text-xs font-bold hover:bg-white/10" data-testid="button-map-toggle">{mapOpen ? 'Close preview' : 'Open preview'} <ChevronDown size={14} className={mapOpen ? 'rotate-180' : ''} /></button></div></div></div><p className="mt-4 text-xs leading-5 text-[#202337]/50">Use Navigate to open Google Maps with this school address already selected.</p></div></div></section>
+     <section className="bg-[#e3b45b] px-5 py-16"><div className="page-wrap flex flex-col justify-between gap-7 md:flex-row md:items-center"><div><p className="font-mono-school text-[10px] uppercase tracking-[.16em] text-[#202337]/60">Stay in the loop</p><h2 className="mt-3 font-display text-4xl font-bold text-[#202337]">Follow our school days.</h2></div><div className="flex flex-wrap gap-3"><a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#202337] px-5 py-3 text-sm font-bold text-[#f8eedc]" data-testid="link-contact-whatsapp-cta"><MessageCircle size={16} /> WhatsApp</a><a href={schoolContent.contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#202337]/25 px-5 py-3 text-sm font-bold text-[#202337]" data-testid="link-contact-instagram"><Instagram size={16} /> Instagram</a><a href={schoolContent.contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#202337]/25 text-[#202337] px-5 py-3 text-sm font-bold" data-testid="link-contact-facebook">Facebook</a><a href={schoolContent.contact.phoneHref} className="inline-flex items-center gap-2 rounded-full border border-[#202337]/25 px-5 py-3 text-sm font-bold text-[#202337]" data-testid="link-contact-call"><Phone size={15} /> Call now</a></div></div></section>
   </>;
 }
 
@@ -426,9 +417,9 @@ function ContactLine({ icon, label, content }: { icon: ReactNode; label: string;
 
 function MandatoryDisclosure() {
   return <>
-    <PageIntro eyebrow="For transparency" title={<>Mandatory<br /><span className="text-[#e3b45b]">Disclosure.</span></>} copy="Important school information, shared clearly for families and the wider school community." />
-    <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-10 lg:grid-cols-[.7fr_1.3fr]"><SectionHeading eyebrow="School particulars" title="The essentials, in one place." copy="Saraswati Primary English Medium School is a State Board school managed by the Lewa Educational Union." /><div className="overflow-hidden rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9]"><dl className="divide-y divide-[#202337]/10">{[['School name', 'Saraswati Primary English Medium School, Jalgaon'], ['Management', 'Lewa Educational Union'], ['Board', 'Maharashtra State Board'], ['Medium of instruction', 'English'], ['School level', 'Pre-Primary, Primary and Middle School (Classes 1–10)'], ['Contact office', '0257-2211814 · lewaedusaraswati@gmail.com']].map(([term, detail]) => <div key={term} className="grid gap-2 px-6 py-5 sm:grid-cols-[.7fr_1.3fr] sm:gap-5"><dt className="font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#c77a22]">{term}</dt><dd className="text-sm font-semibold text-[#202337]/75">{detail}</dd></div>)}</dl></div></div></section>
-    <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc]"><div className="page-wrap grid gap-8 md:grid-cols-3">{[['Recognition', 'A proud State Board school serving the Jalgaon community.'], ['Leadership', 'A committed teaching team of 40+ educators.'], ['Belonging', 'A growing school family of 850+ students.']].map(([title, copy]) => <div key={title} className="border-t border-[#f8eedc]/25 pt-5"><p className="font-mono-school text-[10px] uppercase tracking-[.14em] text-[#e3b45b]">{title}</p><p className="mt-5 font-display text-3xl font-bold leading-none">{copy}</p></div>)}</div></section>
+     <PageIntro eyebrow="For transparency" title={<>Mandatory<br /><span className="text-[#e3b45b]">Disclosure.</span></>} copy="Important school information, shared clearly for families and the wider school community." />
+     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-10 lg:grid-cols-[.7fr_1.3fr]"><SectionHeading eyebrow="School particulars" title="The essentials, in one place." copy={`${schoolContent.identity.name} is a ${schoolContent.identity.board} school managed by the ${schoolContent.identity.management}.`} /><div className="overflow-hidden rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9]"><dl className="divide-y divide-[#202337]/10">{[...schoolContent.disclosure, ['Contact office', `${schoolContent.contact.phone} · ${schoolContent.contact.email}`]].map(([term, detail]) => <div key={term} className="grid gap-2 px-6 py-5 sm:grid-cols-[.7fr_1.3fr] sm:gap-5"><dt className="font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#c77a22]">{term}</dt><dd className="text-sm font-semibold text-[#202337]/75">{detail}</dd></div>)}</dl></div></div></section>
+     <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc]"><div className="page-wrap grid gap-8 md:grid-cols-3">{schoolContent.disclosureHighlights.map(([title, copy]) => <div key={title} className="border-t border-[#f8eedc]/25 pt-5"><p className="font-mono-school text-[10px] uppercase tracking-[.14em] text-[#e3b45b]">{title}</p><p className="mt-5 font-display text-3xl font-bold leading-none">{copy}</p></div>)}</div></section>
   </>;
 }
 
@@ -442,6 +433,19 @@ function RoutedErrorBoundary({ children }: { children: ReactNode }) {
 }
 
 function App() {
+  useEffect(() => {
+    document.title = schoolContent.identity.name;
+    const metaContent = [
+      ['meta[name="description"]', schoolContent.identity.metaDescription],
+      ['meta[property="og:title"]', schoolContent.identity.name],
+      ['meta[property="og:description"]', schoolContent.identity.ogDescription],
+      ['meta[name="twitter:title"]', schoolContent.identity.name],
+      ['meta[name="twitter:description"]', schoolContent.identity.ogDescription],
+    ] as const;
+    metaContent.forEach(([selector, content]) => {
+      document.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', content);
+    });
+  }, []);
   return <TooltipProvider><div className="font-sans"><RoutedErrorBoundary><SiteShell><Router /></SiteShell></RoutedErrorBoundary></div><Toaster /></TooltipProvider>;
 }
 
