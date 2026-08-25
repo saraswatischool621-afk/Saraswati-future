@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Saraswati Primary English Medium School"
+description = "A modern, responsive public website for Saraswati Primary English Medium School, Jalgaon, covering academics, admissions, fees, facilities, news, and contact information."
+version = "1.0.0"
+id = "artifacts/saraswati-school"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24445
+
+[services.development]
+run = "pnpm --filter @workspace/saraswati-school run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/saraswati-school", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/saraswati-school/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24445"
+BASE_PATH = "/"
