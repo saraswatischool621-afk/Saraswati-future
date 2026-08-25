@@ -1,5 +1,4 @@
 import { type ChangeEvent, type FormEvent, type ReactNode, useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -37,10 +36,10 @@ import {
 } from 'lucide-react';
 import NotFound from '@/pages/not-found';
 
-const queryClient = new QueryClient();
 const schoolLogo = '/school-logo.jpg';
 const schoolAddress = 'P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon';
 const whatsappHref = 'https://wa.me/919975249949?text=Namaste%20Saraswati%20School%2C%20I%20would%20like%20to%20know%20more%20about%20admissions.';
+const whatsappNumber = '919975249949';
 const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(schoolAddress)}`;
 
 const galleryItems = [
@@ -359,46 +358,30 @@ function Academics() {
 }
 
 function Admissions() {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'ready'>('idle');
   const [form, setForm] = useState({ student: '', parent: '', email: '', phone: '', className: '', message: '' });
-  const [honeypot, setHoneypot] = useState('');
-  const [openedAt] = useState(() => Date.now());
   const update = (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setForm({ ...form, [key]: event.target.value });
-  const sendEnquiry = async (event: FormEvent<HTMLFormElement>) => {
+  const sendEnquiry = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (honeypot || Date.now() - openedAt < 1500) return;
-    setStatus('sending');
-    setErrorMessage('');
-    const payload = new URLSearchParams({
-      'form-name': 'admission-enquiry',
-      'bot-field': honeypot,
-      student: form.student,
-      parent: form.parent,
-      email: form.email,
-      phone: form.phone,
-      className: form.className,
-      message: form.message,
-    });
-    try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: payload.toString(),
-      });
-      if (!response.ok) throw new Error('The form service did not accept the enquiry.');
-      setStatus('success');
-    } catch {
-      setStatus('error');
-      setErrorMessage(import.meta.env.DEV
-        ? 'This preview is not connected to Netlify Forms yet. It will submit securely after the site is deployed to Netlify.'
-        : 'We could not send your enquiry right now. Please call 0257-2211814 or try again.');
-    }
+    const message = [
+      'Namaste Saraswati School,',
+      '',
+      'I would like to enquire about admissions.',
+      '',
+      `Student name: ${form.student}`,
+      `Parent / guardian: ${form.parent}`,
+      `Parent contact: ${form.phone}`,
+      `Email: ${form.email}`,
+      `Grade applying for: ${form.className}`,
+      form.message.trim() ? `Message: ${form.message.trim()}` : '',
+    ].filter(Boolean).join('\n');
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+    setStatus('ready');
   };
   return <>
     <PageIntro eyebrow="Admissions · 2026–27" title={<>Start with a<br /><span className="text-[#d95340]">conversation.</span></>} copy="Choosing a school is personal. Our admissions team is here to answer the practical questions and help you picture your child’s day with us." />
     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.8fr_1.2fr]"><div><SectionHeading eyebrow="Good to know" title="The details, made clear." copy="Keep these essentials close as you plan your next step. We look forward to meeting your family." /><div className="mt-10 grid gap-3"><InfoRow icon={<CalendarDays />} title="Registration deadlines" text="End of April for Pre-Primary; end of May for Classes 1st to 9th & 11th." /><InfoRow icon={<Clock3 />} title="Meeting hours" text="Principal: 10:00 AM–11:00 AM on working days or by appointment. Teachers: Saturdays after school hours." /><InfoRow icon={<MapPin />} title="Visit the campus" text="P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon." /></div></div><div className="rounded-[2rem] bg-[#f4e6c9] p-7 md:p-10"><div className="flex items-start justify-between gap-5"><div><p className="font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#c77a22]">Before you visit</p><h2 className="mt-3 font-display text-4xl font-bold text-[#202337]">Bring these along.</h2></div><div className="grid size-12 place-items-center rounded-2xl bg-[#202337] text-[#e3b45b]"><Table2 size={20} /></div></div><div className="mt-8 grid gap-3">{['Original Birth Certificate / Transfer Certificate (T.C./L.C.)', 'Parent & Child Identity Proof Xerox (1 copy)', "Father's Caste Certificate Xerox (1 copy)", '1 passport-size photo each (parent & child)', 'Previous school marksheet'].map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-[#202337]/10 bg-[#f8eedc]/70 p-3 text-sm text-[#202337]/75"><CircleCheck size={16} className="mt-0.5 shrink-0 text-[#3b7f7c]" />{item}</div>)}</div><p className="mt-6 text-xs leading-5 text-[#202337]/50">Please bring originals for verification. The office team will guide you through the remaining steps.</p></div></div></section>
-    <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc] md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.72fr_1.28fr]"><div><p className="font-mono-school text-[10px] uppercase tracking-[.18em] text-[#e3b45b]">Your first step</p><h2 className="mt-4 font-display text-5xl font-bold leading-[.9] md:text-7xl">Tell us a little<br />about your family.</h2><p className="mt-6 max-w-sm text-sm leading-6 text-[#f8eedc]/65">Your enquiry is securely submitted to Netlify Forms. The school can receive notifications at lewaedusaraswati@gmail.com after the site is connected in Netlify.</p></div><div className="rounded-[2rem] bg-[#f8eedc] p-6 text-[#202337] md:p-9">{status === 'success' ? <div className="flex min-h-[410px] flex-col items-center justify-center text-center"><div className="grid size-16 place-items-center rounded-full bg-[#3b7f7c] text-[#f8eedc]"><Check size={30} /></div><h2 className="mt-6 font-display text-5xl font-bold">Enquiry sent.</h2><p className="mt-4 max-w-sm text-sm leading-6 text-[#202337]/60">Thank you. The school office will review your details and be in touch.</p><button type="button" onClick={() => { setStatus('idle'); setForm({ student: '', parent: '', email: '', phone: '', className: '', message: '' }); }} className="mt-7 font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#c94b35] underline underline-offset-4" data-testid="button-submit-another">Send another enquiry</button></div> : <form name="admission-enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={sendEnquiry} className="grid gap-5"><input type="hidden" name="form-name" value="admission-enquiry" /><input type="text" name="bot-field" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} aria-hidden="true" tabIndex={-1} autoComplete="off" className="hidden" /><div className="grid gap-5 sm:grid-cols-2"><label className="grid gap-2 text-xs font-bold">Student name<input required name="student" value={form.student} onChange={update('student')} placeholder="Child's full name" className="school-input" data-testid="input-student-name" /></label><label className="grid gap-2 text-xs font-bold">Parent / guardian name<input required name="parent" value={form.parent} onChange={update('parent')} placeholder="Your full name" className="school-input" data-testid="input-parent-name" /></label></div><div className="grid gap-5 sm:grid-cols-2"><label className="grid gap-2 text-xs font-bold">Parent contact<input required name="phone" type="tel" value={form.phone} onChange={update('phone')} placeholder="+91 00000 00000" className="school-input" data-testid="input-phone" /></label><label className="grid gap-2 text-xs font-bold">Email address<input required name="email" type="email" value={form.email} onChange={update('email')} placeholder="you@example.com" className="school-input" data-testid="input-email" /></label></div><label className="grid gap-2 text-xs font-bold">Grade applying for<select required name="className" value={form.className} onChange={update('className')} className="school-input" data-testid="select-class"><option value="">Choose a grade</option><option>Pre-Primary</option><option>Class 1–4</option><option>Class 5–10</option></select></label><label className="grid gap-2 text-xs font-bold">Message<textarea name="message" value={form.message} onChange={update('message')} rows={4} placeholder="Tell us how we can help..." className="school-input resize-none" /></label><button type="submit" disabled={status === 'sending'} className="inline-flex w-fit items-center gap-2 rounded-full bg-[#d95340] px-5 py-3.5 text-sm font-extrabold text-[#fff8ee] transition-transform hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60" data-testid="button-submit-enquiry">{status === 'sending' ? 'Sending…' : 'Send enquiry'} <Send size={15} /></button>{status === 'error' && <p role="alert" className="text-[11px] font-semibold text-[#c94b35]">{errorMessage}</p>}<p className="text-[11px] text-[#202337]/45">Your details are sent directly to Netlify Forms and are not routed through the Replit backend.</p></form>}</div></div></section>
+     <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc] md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.72fr_1.28fr]"><div><p className="font-mono-school text-[10px] uppercase tracking-[.18em] text-[#e3b45b]">Your first step</p><h2 className="mt-4 font-display text-5xl font-bold leading-[.9] md:text-7xl">Tell us a little<br />about your family.</h2><p className="mt-6 max-w-sm text-sm leading-6 text-[#f8eedc]/65">Share a few details and we’ll open WhatsApp with a ready-to-send message addressed to the school admissions team.</p></div><div className="rounded-[2rem] bg-[#f8eedc] p-6 text-[#202337] md:p-9">{status === 'ready' ? <div className="flex min-h-[410px] flex-col items-center justify-center text-center"><div className="grid size-16 place-items-center rounded-full bg-[#3b7f7c] text-[#f8eedc]"><MessageCircle size={30} /></div><h2 className="mt-6 font-display text-5xl font-bold">WhatsApp is ready.</h2><p className="mt-4 max-w-sm text-sm leading-6 text-[#202337]/60">Your enquiry details are pre-filled in WhatsApp. Tap send there to complete your message to the school.</p><button type="button" onClick={() => setStatus('idle')} className="mt-7 font-mono-school text-[10px] font-bold uppercase tracking-[.16em] text-[#c94b35] underline underline-offset-4" data-testid="button-submit-another">Edit enquiry</button></div> : <form onSubmit={sendEnquiry} className="grid gap-5"><div className="grid gap-5 sm:grid-cols-2"><label className="grid gap-2 text-xs font-bold">Student name<input required name="student" value={form.student} onChange={update('student')} placeholder="Child's full name" className="school-input" data-testid="input-student-name" /></label><label className="grid gap-2 text-xs font-bold">Parent / guardian name<input required name="parent" value={form.parent} onChange={update('parent')} placeholder="Your full name" className="school-input" data-testid="input-parent-name" /></label></div><div className="grid gap-5 sm:grid-cols-2"><label className="grid gap-2 text-xs font-bold">Parent contact<input required name="phone" type="tel" value={form.phone} onChange={update('phone')} placeholder="+91 00000 00000" className="school-input" data-testid="input-phone" /></label><label className="grid gap-2 text-xs font-bold">Email address<input required name="email" type="email" value={form.email} onChange={update('email')} placeholder="you@example.com" className="school-input" data-testid="input-email" /></label></div><label className="grid gap-2 text-xs font-bold">Grade applying for<select required name="className" value={form.className} onChange={update('className')} className="school-input" data-testid="select-class"><option value="">Choose a grade</option><option>Pre-Primary</option><option>Class 1–4</option><option>Class 5–10</option></select></label><label className="grid gap-2 text-xs font-bold">Message<textarea name="message" value={form.message} onChange={update('message')} rows={4} placeholder="Tell us how we can help..." className="school-input resize-none" /></label><button type="submit" className="inline-flex w-fit items-center gap-2 rounded-full bg-[#d95340] px-5 py-3.5 text-sm font-extrabold text-[#fff8ee] transition-transform hover:-translate-y-0.5" data-testid="button-submit-enquiry">Open WhatsApp enquiry <MessageCircle size={16} /></button><p className="text-[11px] text-[#202337]/45">Your details stay in this form until you choose to open WhatsApp. Nothing is sent to a website backend.</p></form>}</div></div></section>
   </>;
 }
 
@@ -459,7 +442,7 @@ function RoutedErrorBoundary({ children }: { children: ReactNode }) {
 }
 
 function App() {
-  return <QueryClientProvider client={queryClient}><TooltipProvider><div className="font-sans"><RoutedErrorBoundary><SiteShell><Router /></SiteShell></RoutedErrorBoundary></div><Toaster /></TooltipProvider></QueryClientProvider>;
+  return <TooltipProvider><div className="font-sans"><RoutedErrorBoundary><SiteShell><Router /></SiteShell></RoutedErrorBoundary></div><Toaster /></TooltipProvider>;
 }
 
 export default App;
