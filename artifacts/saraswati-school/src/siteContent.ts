@@ -13,7 +13,7 @@ export const schoolContent = {
     medium: 'English',
     management: 'Lewa Educational Union',
     registration: 'Reg. No. A-410, Jalgaon',
-    founded: '1985',
+    founded: '2016',
     levels: 'Pre-Primary, Primary and Middle School (Classes 1–10)',
     academicYear: '2026–27',
     logo: '/school-logo.jpg',
@@ -87,8 +87,38 @@ export const schoolContent = {
     stats: [
       ['850+', 'students'],
       ['40+', 'teachers'],
-      ['1985', 'founded'],
+      ['2016', 'founded'],
       ['1', 'shared purpose'],
+    ],
+  },
+
+  vision: {
+    eyebrow: 'Our vision',
+    title: 'A brighter beginning for every child.',
+    intro:
+      'We imagine a school where every child grows into a confident learner, a thoughtful human being and a hopeful contributor to the world around them.',
+    promiseTitle: 'Learning that opens doors.',
+    promiseCopy:
+      'From a child’s first brave question to the ideas they carry into the future, we create a warm, purposeful environment where curiosity can become character.',
+    pillars: [
+      ['01', 'Confidence to express', 'Children find their voice, share their ideas and learn to listen with care.'],
+      ['02', 'Curiosity to explore', 'Questions lead the way through classrooms, labs, studios and the wider world.'],
+      ['03', 'Character to contribute', 'Kindness, responsibility and respect turn learning into a way of living.'],
+    ],
+  },
+
+  mission: {
+    eyebrow: 'Our mission',
+    title: 'Make every school day matter.',
+    intro:
+      'We work every day to give children strong foundations, generous attention and meaningful opportunities to learn by doing.',
+    promiseTitle: 'A steady hand. An open heart.',
+    promiseCopy:
+      'Our teachers partner with families to help each child build knowledge, discover their strengths and step forward with resilience, empathy and joy.',
+    pillars: [
+      ['01', 'Know every learner', 'We notice the individual child and make room for different ways to grow.'],
+      ['02', 'Teach for tomorrow', 'We build strong academic foundations alongside communication, creativity and digital fluency.'],
+      ['03', 'Grow together', 'We bring children, teachers and families together as a caring school community.'],
     ],
   },
 

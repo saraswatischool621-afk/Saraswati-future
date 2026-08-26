@@ -61,6 +61,8 @@ const navItems = [
   { href: '/admissions', label: 'Admissions' },
   { href: '/fees', label: 'Fees' },
   { href: '/gallery', label: 'Gallery' },
+  { href: '/vision', label: 'Vision' },
+  { href: '/mission', label: 'Mission' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -88,17 +90,11 @@ function SiteShell({ children }: { children: ReactNode }) {
         <Link href="/admissions" className="underline decoration-1 underline-offset-4" data-testid="link-top-admissions">Schedule a school visit</Link>
       </div>
       <header className="relative z-40 bg-[#202337] text-[#f8eedc]">
-        <div className="page-wrap flex min-h-[76px] items-center justify-between gap-6">
+        <div className="page-wrap flex min-h-[76px] items-center justify-between gap-4 py-3 lg:flex-wrap lg:gap-x-6 lg:gap-y-2 lg:py-4">
           <LogoMark compact />
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href} className={`rounded-full px-3.5 py-2 text-[12px] font-semibold transition-colors hover:bg-white/10 ${location === item.href ? 'bg-white/10 text-[#e3b45b]' : 'text-[#f8eedc]/75'}`} data-testid={`link-nav-${item.label.toLowerCase()}`}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
           <div className="hidden items-center gap-3 lg:flex">
             <a href={schoolContent.contact.phoneHref} className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-call-header"><Phone size={14} /> {schoolContent.contact.phone}</a>
+            <Link href="/mandatory-disclosure" className="text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-disclosure-header">Mandatory Disclosure</Link>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-whatsapp-header"><MessageCircle size={14} /> WhatsApp</a>
             <Link href="/admissions" className="flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2.5 text-[12px] font-extrabold text-[#202337] transition-transform hover:-translate-y-0.5" data-testid="link-enquire-header">Enquire now <ArrowDownRight size={15} /></Link>
           </div>
@@ -106,11 +102,21 @@ function SiteShell({ children }: { children: ReactNode }) {
             {menuOpen ? <X size={23} /> : <Menu size={23} />}
           </button>
         </div>
+        <nav className="hidden border-t border-white/10 lg:flex" aria-label="Main navigation">
+          <div className="page-wrap flex flex-wrap items-center justify-center gap-1 py-2">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className={`rounded-full px-3.5 py-2 text-[12px] font-semibold transition-colors hover:bg-white/10 ${location === item.href ? 'bg-white/10 text-[#e3b45b]' : 'text-[#f8eedc]/75'}`} data-testid={`link-nav-${item.label.toLowerCase()}`}>
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
         {menuOpen && (
           <nav className="border-t border-white/10 px-5 py-4 lg:hidden" aria-label="Mobile navigation">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="block border-b border-white/10 py-3 text-sm font-semibold text-[#f8eedc]" data-testid={`link-mobile-${item.label.toLowerCase()}`}>{item.label}</Link>
             ))}
+            <Link href="/mandatory-disclosure" onClick={() => setMenuOpen(false)} className="block border-b border-white/10 py-3 text-sm font-semibold text-[#e3b45b]" data-testid="link-mobile-mandatory-disclosure">Mandatory Disclosure</Link>
             <a href={schoolContent.contact.phoneHref} className="mt-4 flex items-center gap-2 py-2 text-sm text-[#e3b45b]" data-testid="link-call-mobile"><Phone size={15} /> {schoolContent.contact.phone}</a>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 text-sm text-[#e3b45b]" data-testid="link-whatsapp-mobile"><MessageCircle size={15} /> Chat on WhatsApp</a>
           </nav>
@@ -148,6 +154,8 @@ function Footer() {
               <Link href="/admissions" className="hover:text-[#e3b45b]" data-testid="link-footer-admissions">Admissions</Link>
               <Link href="/fees" className="hover:text-[#e3b45b]" data-testid="link-footer-fees">Fee structure</Link>
               <Link href="/gallery" className="hover:text-[#e3b45b]" data-testid="link-footer-gallery">School gallery</Link>
+               <Link href="/vision" className="hover:text-[#e3b45b]" data-testid="link-footer-vision">Our vision</Link>
+               <Link href="/mission" className="hover:text-[#e3b45b]" data-testid="link-footer-mission">Our mission</Link>
             </div>
           </div>
           <div>
@@ -423,8 +431,48 @@ function MandatoryDisclosure() {
   </>;
 }
 
+function DirectionPage({ page }: { page: 'vision' | 'mission' }) {
+  const content = schoolContent[page];
+  const otherPage = page === 'vision' ? 'mission' : 'vision';
+  const otherLabel = page === 'vision' ? 'Read our mission' : 'Read our vision';
+
+  return <>
+    <PageIntro eyebrow={content.eyebrow} title={content.title} copy={content.intro}>
+      <Link href={`/${otherPage}`} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#e3b45b] hover:text-[#f8eedc]" data-testid={`link-${page}-switch`}>
+        {otherLabel} <ArrowRight size={16} />
+      </Link>
+    </PageIntro>
+    <section className="bg-[#f8eedc] px-5 py-20 md:py-28">
+      <div className="page-wrap grid gap-12 lg:grid-cols-[.78fr_1.22fr] lg:items-start">
+        <SectionHeading eyebrow="What guides us" title={content.promiseTitle} copy={content.promiseCopy} />
+        <div className="grid gap-4">
+          {content.pillars.map(([number, title, copy], index) => (
+            <article key={number} className={`relative overflow-hidden rounded-[1.7rem] p-7 md:p-8 ${index === 0 ? 'bg-[#e3b45b] text-[#202337]' : index === 1 ? 'bg-[#3b7f7c] text-[#f8eedc]' : 'bg-[#d95340] text-[#fff8ee]'}`}>
+              <div className="absolute -right-10 -top-12 size-40 rounded-full border-[24px] border-current opacity-15" />
+              <div className="relative">
+                <span className="font-mono-school text-[10px] font-bold opacity-65">{number}</span>
+                <h2 className="mt-12 max-w-md font-display text-4xl font-bold leading-[.95] md:text-5xl">{title}</h2>
+                <p className="mt-4 max-w-lg text-sm leading-6 opacity-75">{copy}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section className="bg-[#202337] px-5 py-20 text-[#f8eedc] md:py-24">
+      <div className="page-wrap flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p className="font-mono-school text-[10px] font-bold uppercase tracking-[.18em] text-[#e3b45b]">A school with heart</p>
+          <h2 className="mt-4 max-w-2xl font-display text-5xl font-bold leading-[.9] md:text-7xl">Come see these values in action.</h2>
+        </div>
+        <Link href="/contact" className="inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-5 py-3.5 text-sm font-extrabold text-[#202337]" data-testid={`link-${page}-contact`}>Visit the school <ArrowRight size={16} /></Link>
+      </div>
+    </section>
+  </>;
+}
+
 function Router() {
-  return <Switch><Route path="/" component={Home} /><Route path="/academics" component={Academics} /><Route path="/admissions" component={Admissions} /><Route path="/fees" component={Fees} /><Route path="/gallery" component={Gallery} /><Route path="/contact" component={Contact} /><Route path="/mandatory-disclosure" component={MandatoryDisclosure} /><Route component={NotFound} /></Switch>;
+  return <Switch><Route path="/" component={Home} /><Route path="/academics" component={Academics} /><Route path="/admissions" component={Admissions} /><Route path="/fees" component={Fees} /><Route path="/gallery" component={Gallery} /><Route path="/vision"><DirectionPage page="vision" /></Route><Route path="/mission"><DirectionPage page="mission" /></Route><Route path="/contact" component={Contact} /><Route path="/mandatory-disclosure" component={MandatoryDisclosure} /><Route component={NotFound} /></Switch>;
 }
 
 function RoutedErrorBoundary({ children }: { children: ReactNode }) {
