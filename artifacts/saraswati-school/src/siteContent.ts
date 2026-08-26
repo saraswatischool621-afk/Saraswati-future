@@ -77,7 +77,7 @@ export const schoolContent = {
 
   about: {
     description:
-      'Saraswati Primary English Medium School is a premier educational institution run under the aegis of Lewa Educational Union (Reg. No. A-410, Jalgaon). Committed to nurturing young minds in a safe, vibrant, and supportive environment, our school proudly caters to over 850 students with the support of a dedicated team of more than 40 experienced teachers. We are equipped with modern learning infrastructure, including a well-designed Science lab, a modern Computer lab, and dedicated music and dance rooms to foster technical skills and creative expression. With comprehensive facilities for both indoor and outdoor sports, we ensure a balanced blend of academic excellence, holistic growth, and physical well-being for every child.',
+      'Saraswati Primary English Medium School is a premier educational institution run under the aegis of Lewa Educational Union (Reg. No. A-410, Jalgaon). Committed to nurturing young minds in a safe, vibrant, and supportive environment, our school proudly caters to over 850 students with the support of a dedicated team of 37 experienced teachers. We are equipped with modern learning infrastructure, including a well-designed Science lab, a modern Computer lab, and dedicated music and dance rooms to foster technical skills and creative expression. With comprehensive facilities for both indoor and outdoor sports, we ensure a balanced blend of academic excellence, holistic growth, and physical well-being for every child.',
     values: [
       ['01', 'Know every learner', 'Small acts of attention make room for brave questions and steady progress.'],
       ['02', 'Learn by doing', 'From a seed in the science lab to a rhythm in the music room, ideas become real.'],
@@ -86,7 +86,7 @@ export const schoolContent = {
     ],
     stats: [
       ['850+', 'students'],
-      ['40+', 'teachers'],
+      ['37', 'teachers'],
       ['2016', 'founded'],
       ['1', 'shared purpose'],
     ],
@@ -165,17 +165,60 @@ export const schoolContent = {
     { src: '/gallery/team-spirit.webp', title: 'Team spirit, brightly expressed', label: 'School community', text: 'Shared celebration, active play and a proud sense of belonging.' },
   ],
 
-  disclosure: [
-    ['School name', 'Saraswati Primary English Medium School, Jalgaon'],
-    ['Management', 'Lewa Educational Union'],
-    ['Board', 'Maharashtra State Board'],
-    ['Medium of instruction', 'English'],
-    ['School level', 'Pre-Primary, Primary and Middle School (Classes 1–10)'],
-  ],
+  mandatoryDisclosure: {
+    documents: [
+      { title: 'Fee Structure Of The School', file: '' },
+      { title: 'Annual Academic Calendar', file: '' },
+      { title: 'List Of School Management Committee (SMC) Members', file: '' },
+      { title: 'List Of Parent Teacher Association (PTA) Members', file: '' },
+      { title: 'Recognition / Affiliation Certificate', file: '' },
+      { title: 'School Infrastructure And Safety Details', file: '' },
+    ],
+    sections: [
+      {
+        title: 'General Information',
+        rows: [
+          ['Name Of The School', 'Saraswati Primary English Medium school'],
+          ['Affiliation number', '----------'],
+          ['School Udise Code', '27031602133'],
+          ['Address', 'P-52, Ajintha Road, Near Lokmat Office, MIDC, Jalgaon'],
+          ['Principal Name', 'Mr. David Das'],
+          ['Principal Qualification', 'MA in English, B.Ed, B.Com'],
+          ['School Email Id', 'lewaedusaraswati@gmail.com'],
+          ['Contact Number', '02572211814'],
+        ],
+      },
+      {
+        title: 'Staff (Teaching)',
+        rows: [
+          ['Principal', 'Mr. David Das'],
+          ['Total Number Of Teachers', '37'],
+          ['PGT', '9'],
+          ['TGT', '6'],
+          ['PRT', '22'],
+          ['Teacher Student Ratio', '35:1'],
+          ['Details Of Special Educator', '1'],
+          ['Details Of Counsellor And Wellness Teacher', '1'],
+        ],
+      },
+      {
+        title: 'Campus Details',
+        rows: [
+          ['Total Campus Area Of School', '5949 sq. meter'],
+          ['Number And Size Of The Classrooms', '27 rooms, 548 sq. ft. each'],
+          ['No. And Size Of Laboratories Including Computer Lab', '3 laboratories, 174 sq. meter'],
+          ['Internet Facility', 'Yes'],
+          ['Drinking Facility', 'Yes'],
+          ['No. Of Girls Toilet', '20'],
+          ['No. Of Boys Toilet', '22'],
+        ],
+      },
+    ],
+  },
 
   disclosureHighlights: [
     ['Recognition', 'A proud State Board school serving the Jalgaon community.'],
-    ['Leadership', 'A committed teaching team of 40+ educators.'],
+    ['Leadership', 'A committed teaching team of 37 educators.'],
     ['Belonging', 'A growing school family of 850+ students.'],
   ],
 } as const;

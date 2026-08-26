@@ -16,7 +16,9 @@ import {
   ChevronRight,
   CircleCheck,
   Clock3,
+  Download,
   FlaskConical,
+  FileText,
   HeartHandshake,
   Instagram,
   Laptop,
@@ -426,9 +428,19 @@ function ContactLine({ icon, label, content }: { icon: ReactNode; label: string;
 function MandatoryDisclosure() {
   return <>
      <PageIntro eyebrow="For transparency" title={<>Mandatory<br /><span className="text-[#e3b45b]">Disclosure.</span></>} copy="Important school information, shared clearly for families and the wider school community." />
-     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap grid gap-10 lg:grid-cols-[.7fr_1.3fr]"><SectionHeading eyebrow="School particulars" title="The essentials, in one place." copy={`${schoolContent.identity.name} is a ${schoolContent.identity.board} school managed by the ${schoolContent.identity.management}.`} /><div className="overflow-hidden rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9]"><dl className="divide-y divide-[#202337]/10">{[...schoolContent.disclosure, ['Contact office', `${schoolContent.contact.phone} · ${schoolContent.contact.email}`]].map(([term, detail]) => <div key={term} className="grid gap-2 px-6 py-5 sm:grid-cols-[.7fr_1.3fr] sm:gap-5"><dt className="font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#c77a22]">{term}</dt><dd className="text-sm font-semibold text-[#202337]/75">{detail}</dd></div>)}</dl></div></div></section>
+     <section className="bg-[#f4e6c9] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="Documents" title="School records, ready to download." copy="Download the school documents below. To publish a PDF, add it to public/documents and set its file path in src/siteContent.ts." /><div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{schoolContent.mandatoryDisclosure.documents.map((document, index) => <DocumentCard key={document.title} document={document} index={index} />)}</div></div></section>
+     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="Information" title="The essentials, in one place." copy={`${schoolContent.identity.name} is a ${schoolContent.identity.board} school managed by the ${schoolContent.identity.management}.`} /><div className="mt-12 grid gap-10">{schoolContent.mandatoryDisclosure.sections.map(section => <DisclosureSection key={section.title} title={section.title} rows={section.rows} />)}</div></div></section>
      <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc]"><div className="page-wrap grid gap-8 md:grid-cols-3">{schoolContent.disclosureHighlights.map(([title, copy]) => <div key={title} className="border-t border-[#f8eedc]/25 pt-5"><p className="font-mono-school text-[10px] uppercase tracking-[.14em] text-[#e3b45b]">{title}</p><p className="mt-5 font-display text-3xl font-bold leading-none">{copy}</p></div>)}</div></section>
   </>;
+}
+
+function DocumentCard({ document, index }: { document: (typeof schoolContent.mandatoryDisclosure.documents)[number]; index: number }) {
+  const content = <><div className="relative flex flex-1 flex-col items-center justify-center gap-5 px-5 pt-7 text-center"><div className="grid size-14 place-items-center rounded-2xl bg-[#f8eedc] text-[#c94b35] shadow-sm"><FileText size={30} strokeWidth={1.8} /></div><h3 className="max-w-[17rem] font-display text-2xl font-bold leading-[.98] text-[#202337]">{document.title}</h3></div><div className="flex items-center justify-center gap-2 bg-[#202337] px-4 py-3 text-xs font-bold text-[#f8eedc]">{document.file ? <>Download <Download size={15} /></> : <>Add document PDF <FileText size={14} /></>}</div></>;
+  return document.file ? <a href={document.file} download className="group flex min-h-[235px] flex-col overflow-hidden rounded-[1.7rem] border border-[#202337]/10 bg-[#e7f1ed] shadow-sm transition-transform hover:-translate-y-1" data-testid={`link-disclosure-document-${index}`}>{content}</a> : <div className="flex min-h-[235px] flex-col overflow-hidden rounded-[1.7rem] border border-dashed border-[#202337]/20 bg-[#e7f1ed]" data-testid={`card-disclosure-document-${index}`}>{content}</div>;
+}
+
+function DisclosureSection({ title, rows }: { title: string; rows: readonly (readonly [string, string])[] }) {
+  return <section aria-labelledby={`disclosure-${title.toLowerCase().replace(/\s+/g, '-')}`}><h2 id={`disclosure-${title.toLowerCase().replace(/\s+/g, '-')}`} className="font-display text-4xl font-bold text-[#202337] md:text-5xl">{title}</h2><div className="mt-6 overflow-x-auto rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9]"><table className="w-full min-w-[680px] border-collapse text-left"><thead><tr className="border-b border-[#202337]/15 bg-[#202337] font-mono-school text-[10px] uppercase tracking-[.12em] text-[#f8eedc]"><th className="w-20 px-5 py-4">Sr. No.</th><th className="px-5 py-4">Document / Information</th><th className="px-5 py-4">Details</th></tr></thead><tbody>{rows.map(([label, detail], index) => <tr key={label} className="border-b border-[#202337]/10 last:border-0"><td className="px-5 py-4 font-mono-school text-xs text-[#c77a22]">{index + 1}</td><th scope="row" className="px-5 py-4 text-sm font-bold text-[#202337]">{label}</th><td className="px-5 py-4 text-sm leading-6 text-[#202337]/70">{detail}</td></tr>)}</tbody></table></div></section>;
 }
 
 function DirectionPage({ page }: { page: 'vision' | 'mission' }) {
