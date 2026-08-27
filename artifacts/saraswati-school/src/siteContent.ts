@@ -166,13 +166,32 @@ export const schoolContent = {
   ],
 
   mandatoryDisclosure: {
-    documents: [
-      { title: 'Fee Structure Of The School', file: '' },
-      { title: 'Annual Academic Calendar', file: '' },
-      { title: 'List Of School Management Committee (SMC) Members', file: '' },
-      { title: 'List Of Parent Teacher Association (PTA) Members', file: '' },
-      { title: 'Recognition / Affiliation Certificate', file: '' },
-      { title: 'School Infrastructure And Safety Details', file: '' },
+    documentSections: [
+      {
+        code: 'B',
+        title: 'Documents And Information',
+        documents: [
+          { title: 'Copies Of Affiliation / Extension Letter And Recent Extension Of Affiliation, If Any', file: '' },
+          { title: 'Copies Of Societies / Trust / Company Registration / Renewal Certificate, As Applicable', file: '' },
+          { title: 'Copy Of No Objection Certificate (NOC) Issued, If Applicable, By The State Govt. / UT', file: '' },
+          { title: "Copies Of Recognition Certificate Under RTE Act, 2009, And It's Renewal If Applicable", file: '' },
+          { title: 'Copy Of Valid Building Safety Certificate As Per The National Building Code', file: '' },
+          { title: 'Copy Of Valid Fire Safety Certificate Issued By The Competent Authority', file: '' },
+          { title: 'Copy Of The DEO Certificate Submitted By The School For Affiliation / Extension / Upgradation Or Self Certification By School', file: '' },
+          { title: 'Copies Of Valid Water, Health And Sanitation Certificates', file: '' },
+        ],
+      },
+      {
+        code: 'C',
+        title: 'Result And Academics',
+        documents: [
+          { title: 'Fee Structure Of The School', file: '' },
+          { title: 'Annual Academic Calendar', file: '' },
+          { title: 'List Of School Management Committee (SMC)', file: '' },
+          { title: 'List Of Parents Teachers Association (PTA) Members', file: '' },
+          { title: 'Last Three-Year Result Of The Board Examination As Per Applicability', file: '' },
+        ],
+      },
     ],
     sections: [
       {
