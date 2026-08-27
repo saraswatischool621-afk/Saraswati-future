@@ -1,15 +1,19 @@
-# [Project name]
+# Saraswati School Website
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+The public school website is a static React/Vite artifact with an external Supabase-powered staff content panel.
 
 ## Run & Operate
 
 - `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/saraswati-school run dev` — run the school website
+- `pnpm --filter @workspace/saraswati-school run typecheck` — check the school website
+- `pnpm --filter @workspace/saraswati-school run build` — build the static Netlify-ready site
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- School-site env: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` — Supabase public project URL and publishable/anon key
+- API artifact env: `DATABASE_URL` — PostgreSQL connection string
 
 ## Stack
 
@@ -19,26 +23,38 @@ _Replace the heading above with the project's name, and this line with one sente
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
+- School site: React, Vite, Wouter, Tailwind CSS
+- School content cloud: Supabase Auth, Postgres, and Storage
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/saraswati-school/src/siteContent.ts` — bundled fallback school content
+- `artifacts/saraswati-school/src/lib/supabase.ts` — browser-only Supabase client and content operations
+- `artifacts/saraswati-school/src/pages/admin.tsx` — protected Principal/Admin content panel
+- `artifacts/saraswati-school/supabase/schema.sql` — external Supabase schema and security policies
+- `artifacts/saraswati-school/SUPABASE_ADMIN_SETUP.md` — one-time Supabase and Netlify setup
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The public school site stays statically deployable and never calls the Replit API server.
+- Supabase public credentials are browser-safe; authorization is enforced by database and storage Row Level Security.
+- Public pages use the existing bundled content whenever Supabase is not configured or has no published records.
+- Staff registration and role changes are deliberately managed in Supabase, not exposed in `/admin`.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Public school information, admissions by WhatsApp, fees, gallery, contact, vision/mission, and mandatory disclosure
+- Secure `/admin` content management for gallery photos, school notices, and disclosure PDFs
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Preserve the existing Saraswati design and current public features.
+- Do not make the school site depend on the Replit backend or database.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Never put the Supabase `service_role` key in frontend code or Netlify variables used by Vite.
+- Run the Supabase schema before enabling `/admin`, create users in Supabase Auth, then assign each user a `principal` or `admin` role.
 
 ## Pointers
 

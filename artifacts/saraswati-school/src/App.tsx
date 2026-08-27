@@ -4,6 +4,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Link, Route, Switch, useLocation } from 'wouter';
 import { schoolContent } from './siteContent';
+import AdminPage from './pages/admin';
+import { usePublishedDocuments, usePublishedNotices, usePublishedPhotos } from './hooks/use-cloud-content';
 import {
   ArrowDownRight,
   ArrowRight,
@@ -43,7 +45,6 @@ const whatsappNumber = schoolContent.contact.whatsappNumber;
 const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(schoolContent.contact.whatsappGreeting)}`;
 const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(schoolAddress)}`;
 
-const galleryItems = schoolContent.gallery;
 const facilityIcons = {
   flask: <FlaskConical />,
   laptop: <Laptop />,
@@ -215,16 +216,22 @@ function HomeGallery() {
   const [active, setActive] = useState(0);
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
+  const { items: galleryItems } = usePublishedPhotos();
+
+  useEffect(() => {
+    setActive((current) => Math.min(current, Math.max(galleryItems.length - 1, 0)));
+  }, [galleryItems.length]);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (isManuallyPaused || isInteracting || prefersReducedMotion) return;
+    if (isManuallyPaused || isInteracting || prefersReducedMotion || galleryItems.length < 2) return;
     const timer = window.setInterval(() => setActive((current) => (current + 1) % galleryItems.length), 4800);
     return () => window.clearInterval(timer);
-  }, [isInteracting, isManuallyPaused]);
+  }, [galleryItems.length, isInteracting, isManuallyPaused]);
 
   const move = (direction: number) => setActive((current) => (current + direction + galleryItems.length) % galleryItems.length);
-  const item = galleryItems[active];
+  const item = galleryItems[active] ?? galleryItems[0];
+  if (!item) return null;
 
   return (
     <div
@@ -296,6 +303,7 @@ function Home() {
       <div className="overflow-hidden border-y border-[#202337]/10 bg-[#202337] py-3 text-[#f8eedc]">
         <div className="marquee-track flex w-max items-center gap-10 font-mono-school text-[10px] font-bold uppercase tracking-[.2em]"><span>Curiosity is our curriculum</span><span className="text-[#e3b45b]">•</span><span>Jalgaon’s school community</span><span className="text-[#e3b45b]">•</span><span>Learning with head and heart</span><span className="text-[#e3b45b]">•</span><span>Curiosity is our curriculum</span><span className="text-[#e3b45b]">•</span><span>Jalgaon’s school community</span><span className="text-[#e3b45b]">•</span></div>
       </div>
+      <PublicNotices />
       <section className="bg-[#f8eedc] px-5 py-20 md:py-28">
         <div className="page-wrap grid gap-14 lg:grid-cols-[.85fr_1.15fr]">
            <SectionHeading eyebrow="About Us" title="Education that helps every child flourish." copy={schoolContent.about.description} />
@@ -341,6 +349,37 @@ function Home() {
       </section>
     </>
   );
+}
+
+function PublicNotices() {
+  const { items, loading } = usePublishedNotices();
+  if (loading || items.length === 0) return null;
+  return (
+    <section className="bg-[#f8eedc] px-5 py-16 md:py-20">
+      <div className="page-wrap">
+        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+          <SectionHeading eyebrow="From the school office" title="A few things to know." copy="The latest updates from Saraswati, shared clearly for our school community." />
+          <BellMark />
+        </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {items.slice(0, 4).map((notice) => (
+            <article key={notice.id} className="rounded-[1.5rem] border border-[#202337]/10 bg-[#f4e6c9] p-6">
+              <div className="flex items-center justify-between gap-3">
+                <span className="font-mono-school text-[9px] font-bold uppercase tracking-[.14em] text-[#c77a22]">School notice</span>
+                {notice.published_at && <time className="font-mono-school text-[9px] uppercase tracking-[.1em] text-[#202337]/45">{new Date(notice.published_at).toLocaleDateString('en-IN')}</time>}
+              </div>
+              <h2 className="mt-4 font-display text-3xl font-bold leading-none text-[#202337]">{notice.title}</h2>
+              <p className="mt-3 whitespace-pre-line text-sm leading-6 text-[#202337]/65">{notice.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BellMark() {
+  return <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#202337] text-[#e3b45b]"><CalendarDays size={20} /></span>;
 }
 
 function FacilityCard({ icon, title, copy, tone, className = '' }: { icon: ReactNode; title: string; copy: string; tone: 'saffron' | 'teal' | 'coral'; className?: string }) {
@@ -402,7 +441,12 @@ function Fees() {
 
 function Gallery() {
   const [active, setActive] = useState(0);
-  const item = galleryItems[active];
+  const { items: galleryItems } = usePublishedPhotos();
+  useEffect(() => {
+    setActive((current) => Math.min(current, Math.max(galleryItems.length - 1, 0)));
+  }, [galleryItems.length]);
+  const item = galleryItems[active] ?? galleryItems[0];
+  if (!item) return null;
   const move = (direction: number) => setActive((active + direction + galleryItems.length) % galleryItems.length);
   return <>
     <PageIntro eyebrow="A glimpse inside" title={<>Come see<br /><span className="text-[#d95340]">the feeling.</span></>} copy="A school is more than its walls. Take a small walk through the spaces, rituals and bright details that make Saraswati ours." />
@@ -424,15 +468,24 @@ function ContactLine({ icon, label, content }: { icon: ReactNode; label: string;
 }
 
 function MandatoryDisclosure() {
+  const { items: cloudDocuments } = usePublishedDocuments();
+  const documentSections = schoolContent.mandatoryDisclosure.documentSections.map((section) => ({
+    ...section,
+    documents: cloudDocuments
+      .filter((document) => document.section_code === section.code)
+      .map((document) => ({ title: document.title, file: document.public_url })),
+  }));
   return <>
      <PageIntro eyebrow="For transparency" title={<>Mandatory<br /><span className="text-[#e3b45b]">Disclosure.</span></>} copy="Important school information, shared clearly for families and the wider school community." />
-     <section className="bg-[#f4e6c9] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="B · Documents and information" title="School records, ready to view." copy="Add each PDF to public/documents and set its file path in src/siteContent.ts. The uploaded document link will appear automatically in the table." /><div className="mt-12 grid gap-12">{schoolContent.mandatoryDisclosure.documentSections.map(section => <DisclosureDocumentSection key={section.code} section={section} />)}</div></div></section>
+     <section className="bg-[#f4e6c9] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="B · Documents and information" title="School records, ready to view." copy="Published documents are managed by the school office. Any record without an uploaded PDF remains marked as pending." /><div className="mt-12 grid gap-12">{documentSections.map(section => <DisclosureDocumentSection key={section.code} section={section} />)}</div></div></section>
      <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="Information" title="The essentials, in one place." copy={`${schoolContent.identity.name} is a ${schoolContent.identity.board} school managed by the ${schoolContent.identity.management}.`} /><div className="mt-12 grid gap-10">{schoolContent.mandatoryDisclosure.sections.map(section => <DisclosureSection key={section.title} title={section.title} rows={section.rows} />)}</div></div></section>
      <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc]"><div className="page-wrap grid gap-8 md:grid-cols-3">{schoolContent.disclosureHighlights.map(([title, copy]) => <div key={title} className="border-t border-[#f8eedc]/25 pt-5"><p className="font-mono-school text-[10px] uppercase tracking-[.14em] text-[#e3b45b]">{title}</p><p className="mt-5 font-display text-3xl font-bold leading-none">{copy}</p></div>)}</div></section>
   </>;
 }
 
-function DisclosureDocumentSection({ section }: { section: (typeof schoolContent.mandatoryDisclosure.documentSections)[number] }) {
+type DisclosureDocumentSectionData = { code: string; title: string; documents: readonly { title: string; file: string }[] };
+
+function DisclosureDocumentSection({ section }: { section: DisclosureDocumentSectionData }) {
   return <section aria-labelledby={`document-section-${section.code.toLowerCase()}`}><h2 id={`document-section-${section.code.toLowerCase()}`} className="mb-5 rounded-xl bg-[#202337] px-5 py-4 font-mono-school text-sm font-bold uppercase tracking-[.08em] text-[#f8eedc] sm:text-base">{section.code}: {section.title}</h2><div className="overflow-hidden rounded-[1.7rem] border border-[#202337]/12 bg-[#f8eedc]"><div className="hidden overflow-x-auto md:block"><table className="w-full border-collapse text-left"><thead><tr className="border-b border-[#202337]/15 bg-[#202337]/5 font-mono-school text-[10px] uppercase tracking-[.1em] text-[#202337]/70"><th className="w-20 px-5 py-4">SL No.</th><th className="px-5 py-4">Documents / Information</th><th className="w-64 px-5 py-4">Uploaded Document Link (PDF)</th></tr></thead><tbody>{section.documents.map((document, index) => <tr key={document.title} className="border-b border-[#202337]/10 last:border-0"><td className="px-5 py-5 align-top font-mono-school text-xs font-bold text-[#c77a22]">{index + 1}</td><th scope="row" className="px-5 py-5 text-sm font-semibold leading-6 text-[#202337]">{document.title}</th><td className="px-5 py-5 align-top"><DocumentLink document={document} index={index} section={section.code} /></td></tr>)}</tbody></table></div><div className="grid gap-3 p-3 md:hidden">{section.documents.map((document, index) => <div key={document.title} className="rounded-2xl border border-[#202337]/10 bg-[#f4e6c9] p-4"><div className="flex items-start gap-3"><span className="font-mono-school text-xs font-bold text-[#c77a22]">{String(index + 1).padStart(2, '0')}</span><p className="min-w-0 flex-1 text-sm font-bold leading-5 text-[#202337]">{document.title}</p></div><div className="mt-3 border-t border-[#202337]/10 pt-3"><p className="mb-1 font-mono-school text-[9px] font-bold uppercase tracking-[.1em] text-[#c77a22]">Uploaded document link (PDF)</p><DocumentLink document={document} index={index} section={section.code} /></div></div>)}</div></div></section>;
 }
 
@@ -485,7 +538,7 @@ function DirectionPage({ page }: { page: 'vision' | 'mission' }) {
 }
 
 function Router() {
-  return <Switch><Route path="/" component={Home} /><Route path="/academics" component={Academics} /><Route path="/admissions" component={Admissions} /><Route path="/fees" component={Fees} /><Route path="/gallery" component={Gallery} /><Route path="/vision"><DirectionPage page="vision" /></Route><Route path="/mission"><DirectionPage page="mission" /></Route><Route path="/contact" component={Contact} /><Route path="/mandatory-disclosure" component={MandatoryDisclosure} /><Route component={NotFound} /></Switch>;
+  return <Switch><Route path="/" component={Home} /><Route path="/academics" component={Academics} /><Route path="/admissions" component={Admissions} /><Route path="/fees" component={Fees} /><Route path="/gallery" component={Gallery} /><Route path="/vision"><DirectionPage page="vision" /></Route><Route path="/mission"><DirectionPage page="mission" /></Route><Route path="/contact" component={Contact} /><Route path="/mandatory-disclosure" component={MandatoryDisclosure} /><Route path="/admin" component={AdminPage} /><Route path="/admin/dashboard" component={AdminPage} /><Route component={NotFound} /></Switch>;
 }
 
 function RoutedErrorBoundary({ children }: { children: ReactNode }) {
@@ -494,6 +547,7 @@ function RoutedErrorBoundary({ children }: { children: ReactNode }) {
 }
 
 function App() {
+  const [location] = useLocation();
   useEffect(() => {
     document.title = schoolContent.identity.name;
     const metaContent = [
@@ -507,7 +561,8 @@ function App() {
       document.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', content);
     });
   }, []);
-  return <TooltipProvider><div className="font-sans"><RoutedErrorBoundary><SiteShell><Router /></SiteShell></RoutedErrorBoundary></div><Toaster /></TooltipProvider>;
+  const isAdminRoute = location === '/admin' || location.startsWith('/admin/');
+  return <TooltipProvider><div className="font-sans"><RoutedErrorBoundary>{isAdminRoute ? <Router /> : <SiteShell><Router /></SiteShell>}</RoutedErrorBoundary></div><Toaster /></TooltipProvider>;
 }
 
 export default App;
