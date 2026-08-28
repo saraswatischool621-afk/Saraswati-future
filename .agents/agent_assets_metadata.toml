@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "fSnn9z90FZ67ge-6yr7sz"
+uri = "file://screenshots/saraswati-header-layout.jpg"
+type = "image"
+title = "Saraswati header layout preview"
+description = "Desktop preview showing the logo near Mandatory Disclosure, the society name on one line, the full school name on the next line, and WhatsApp plus Enquire now on the right."
+logical_id = "fd583293-bf5c-41a4-b622-61412ca8ccac"
+content_hash = "sha256:e907c62c1196525acb739103e2b3ec102f5d62ec926592f25311986058f93179"
+size = 36022
+mtime_ms = 1787908096502
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:b6a0b2c6-16f4-4c30-912e-c9e181b71156/fd583293-bf5c-41a4-b622-61412ca8ccac/c81be1f7-55e7-4c4c-8910-d410382dc491"
+storage_version_token = "1787908109422864"
+content_type = "image/jpeg"
