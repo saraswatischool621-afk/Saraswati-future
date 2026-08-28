@@ -11,7 +11,7 @@ export const schoolContent = {
     location: 'Jalgaon',
     board: 'Maharashtra State Board',
     medium: 'English',
-    management: 'Lewa Educational Union',
+    management: "Lewa Educational Union's",
     registration: 'Reg. No. A-410, Jalgaon',
     founded: '2016',
     levels: 'Pre-Primary, Primary and Middle School (Classes 1–10)',
@@ -215,7 +215,7 @@ export const schoolContent = {
       {
         title: 'General Information',
         rows: [
-          ['Name Of The School', 'Lewa Educational Union, Reg. No. A-410, Jalgaon — Saraswati Primary English Medium School'],
+          ['Name Of The School', "Lewa Educational Union's, Reg. No. A-410, Jalgaon — Saraswati Primary English Medium School"],
           ['Affiliation number', '----------'],
           ['School Udise Code', '27031602133'],
           ['Address', 'P-52, Ajintha Road, Near Lokmat Office, MIDC, Jalgaon'],
