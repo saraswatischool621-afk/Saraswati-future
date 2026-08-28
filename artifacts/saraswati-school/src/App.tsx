@@ -95,6 +95,8 @@ function SiteShell({ children }: { children: ReactNode }) {
           <div className="hidden items-center gap-3 lg:flex">
             <a href={schoolContent.contact.phoneHref} className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-call-header"><Phone size={14} /> {schoolContent.contact.phone}</a>
             <Link href="/mandatory-disclosure" className="text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-disclosure-header">Mandatory Disclosure</Link>
+          </div>
+          <div className="ml-auto hidden items-center gap-3 lg:flex">
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-whatsapp-header"><MessageCircle size={14} /> WhatsApp</a>
             <Link href="/admissions" className="flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2.5 text-[12px] font-extrabold text-[#202337] transition-transform hover:-translate-y-0.5" data-testid="link-enquire-header">Enquire now <ArrowDownRight size={15} /></Link>
           </div>
