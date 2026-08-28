@@ -67,7 +67,7 @@ const navItems = [
 
 function LogoMark({ compact = false }: { compact?: boolean }) {
   return (
-    <Link href="/" className={`flex items-center gap-3 group ${compact ? 'max-w-[220px]' : ''}`} data-testid="link-logo-home">
+    <Link href="/" className={`flex items-center gap-3 group ${compact ? 'max-w-[220px] lg:absolute lg:left-1/2 lg:-translate-x-1/2' : ''}`} data-testid="link-logo-home">
       <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-[#f8eedc] ring-2 ring-[#e3b45b]/50 shadow-sm transition-transform group-hover:rotate-3">
         <img src={schoolLogo} alt={`${schoolContent.identity.shortName} School emblem`} width="512" height="476" loading="eager" fetchPriority="high" decoding="async" className="size-full object-cover" />
       </span>
@@ -481,7 +481,7 @@ function DisclosureSection({ title, rows }: { title: string; rows: readonly (rea
 }
 
 function DisclosureDetail({ label, detail }: { label: string; detail: string }) {
-  if (label !== '8. CBSE Inspection Video') return detail;
+  if (label !== 'CBSE Inspection Video') return detail;
   return detail ? (
     <a href={detail} target="_blank" rel="noopener noreferrer" className="font-bold text-[#3b5794] underline decoration-1 underline-offset-2 hover:text-[#c94b35]">View inspection video</a>
   ) : (
