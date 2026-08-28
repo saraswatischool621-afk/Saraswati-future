@@ -24,8 +24,8 @@ export const schoolContent = {
   },
 
   contact: {
-    address: 'P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon',
-    shortAddress: 'P-52, Ajintha Road · Jalgaon',
+    address: 'P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon - 425003',
+    shortAddress: 'P-52, Ajintha Road · Jalgaon - 425003',
     phone: '0257-2211814',
     phoneHref: 'tel:+912572211814',
     whatsappNumber: '919975249949',
@@ -218,7 +218,7 @@ export const schoolContent = {
           ['Name Of The School', "Lewa Educational Union's, Reg. No. A-410, Jalgaon — Saraswati Primary English Medium School"],
           ['Affiliation number', '----------'],
           ['School Udise Code', '27031602133'],
-          ['Address', 'P-52, Ajintha Road, Near Lokmat Office, MIDC, Jalgaon'],
+          ['Address', 'P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon - 425003'],
           ['Principal Name', 'Mr. David Dass'],
           ['Principal Qualification', 'MA in English, B.Ed, B.Com'],
           ['School Email Id', 'lewaedusaraswati@gmail.com'],
