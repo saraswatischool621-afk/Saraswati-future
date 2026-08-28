@@ -72,7 +72,7 @@ function LogoMark({ compact = false }: { compact?: boolean }) {
         <img src={schoolLogo} alt={`${schoolContent.identity.shortName} School emblem`} width="512" height="476" loading="eager" fetchPriority="high" decoding="async" className="size-full object-cover" />
       </span>
       <span className="min-w-0 leading-tight">
-        <span className={`block font-mono-school text-[7px] font-bold uppercase tracking-[.1em] text-[#e3b45b]/75 ${compact ? 'lg:whitespace-nowrap' : ''}`}>{schoolContent.identity.management} · {schoolContent.identity.registration}</span>
+        <span className={`block font-mono-school text-[7px] font-bold uppercase tracking-[.1em] text-[#e3b45b]/75 ${compact ? 'lg:whitespace-nowrap' : ''}`}>{schoolContent.identity.management}</span>
         {compact ? (
           <>
         <span className="hidden font-display text-[1.35rem] font-bold leading-none tracking-tight text-[#f8eedc] lg:block lg:whitespace-nowrap">{schoolContent.identity.name}</span>

@@ -11,14 +11,13 @@ export const schoolContent = {
     location: 'Jalgaon',
     board: 'Maharashtra State Board',
     medium: 'English',
-    management: "Lewa Educational Union's",
-    registration: 'Reg. No. A-410, Jalgaon',
+    management: "Lewa Educational Union's ( Regd.No. A-410)",
     founded: '2016',
     levels: 'Pre-Primary, Primary and Middle School (Classes 1–10)',
     academicYear: '2026–27',
     logo: '/school-logo.webp',
     metaDescription:
-      'Saraswati Primary English Medium School, Jalgaon — a State Board school under Lewa Educational Union, supporting confident learning from Pre-Primary to Class 10.',
+      "Saraswati Primary English Medium School, Jalgaon — a State Board school under Lewa Educational Union's ( Regd.No. A-410), supporting confident learning from Pre-Primary to Class 10.",
     ogDescription:
       'A welcoming State Board school in Jalgaon, nurturing curious minds, confident expression, and active, balanced lives.',
   },
@@ -77,7 +76,7 @@ export const schoolContent = {
 
   about: {
     description:
-      'Saraswati Primary English Medium School is a premier educational institution run under the aegis of Lewa Educational Union (Reg. No. A-410, Jalgaon). Committed to nurturing young minds in a safe, vibrant, and supportive environment, our school proudly caters to over 850 students with the support of a dedicated team of 37 experienced teachers. We are equipped with modern learning infrastructure, including a well-designed Science lab, a modern Computer lab, and dedicated music and dance rooms to foster technical skills and creative expression. With comprehensive facilities for both indoor and outdoor sports, we ensure a balanced blend of academic excellence, holistic growth, and physical well-being for every child.',
+      "Saraswati Primary English Medium School is a premier educational institution run under the aegis of Lewa Educational Union's ( Regd.No. A-410). Committed to nurturing young minds in a safe, vibrant, and supportive environment, our school proudly caters to over 850 students with the support of a dedicated team of 37 experienced teachers. We are equipped with modern learning infrastructure, including a well-designed Science lab, a modern Computer lab, and dedicated music and dance rooms to foster technical skills and creative expression. With comprehensive facilities for both indoor and outdoor sports, we ensure a balanced blend of academic excellence, holistic growth, and physical well-being for every child.",
     values: [
       ['01', 'Know every learner', 'Small acts of attention make room for brave questions and steady progress.'],
       ['02', 'Learn by doing', 'From a seed in the science lab to a rhythm in the music room, ideas become real.'],
@@ -215,7 +214,7 @@ export const schoolContent = {
       {
         title: 'General Information',
         rows: [
-          ['Name Of The School', "Lewa Educational Union's, Reg. No. A-410, Jalgaon — Saraswati Primary English Medium School"],
+          ['Name Of The School', "Lewa Educational Union's ( Regd.No. A-410) — Saraswati Primary English Medium School"],
           ['Affiliation number', '----------'],
           ['School Udise Code', '27031602133'],
           ['Address', 'P-52, Ajintha Road, Near Lokmat Office, M.I.D.C. Area, Jalgaon - 425003'],
