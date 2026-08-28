@@ -73,7 +73,7 @@ function LogoMark({ compact = false }: { compact?: boolean }) {
       </span>
       <span className="min-w-0 leading-tight">
         <span className="block font-mono-school text-[7px] font-bold uppercase tracking-[.1em] text-[#e3b45b]/75">{schoolContent.identity.management} · {schoolContent.identity.registration}</span>
-        <span className="block font-display text-[1.45rem] font-bold tracking-tight text-[#f8eedc]">{schoolContent.identity.shortName}</span>
+        <span className={`block font-display tracking-tight text-[#f8eedc] ${compact ? 'text-[1.8rem] font-bold leading-none lg:text-[2.25rem]' : 'text-[1.45rem] font-bold'}`}>{schoolContent.identity.shortName}</span>
         <span className="block font-mono-school text-[8px] font-bold uppercase tracking-[.14em] text-[#e3b45b]">Primary English Medium School</span>
       </span>
     </Link>
