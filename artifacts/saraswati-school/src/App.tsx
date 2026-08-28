@@ -75,7 +75,7 @@ function LogoMark({ compact = false }: { compact?: boolean }) {
         <span className={`block font-mono-school text-[7px] font-bold uppercase tracking-[.1em] text-[#e3b45b]/75 ${compact ? 'lg:whitespace-nowrap' : ''}`}>{schoolContent.identity.management} · {schoolContent.identity.registration}</span>
         {compact ? (
           <>
-            <span className="hidden font-display text-[1.55rem] font-bold leading-none tracking-tight text-[#f8eedc] lg:block lg:whitespace-nowrap">{schoolContent.identity.name}</span>
+        <span className="hidden font-display text-[1.35rem] font-bold leading-none tracking-tight text-[#f8eedc] lg:block lg:whitespace-nowrap">{schoolContent.identity.name}</span>
             <span className="block font-display text-[1.8rem] font-bold leading-none tracking-tight text-[#f8eedc] lg:hidden">{schoolContent.identity.shortName}</span>
             <span className="block font-mono-school text-[8px] font-bold uppercase tracking-[.14em] text-[#e3b45b] lg:hidden">Primary English Medium School</span>
           </>
@@ -100,13 +100,13 @@ function SiteShell({ children }: { children: ReactNode }) {
         <Link href="/admissions" className="underline decoration-1 underline-offset-4" data-testid="link-top-admissions">Schedule a school visit</Link>
       </div>
       <header className="relative z-40 bg-[#202337] text-[#f8eedc]">
-        <div className="page-wrap flex min-h-[76px] items-center justify-between gap-4 py-3 lg:flex-wrap lg:gap-x-6 lg:gap-y-2 lg:py-4">
+        <div className="page-wrap flex min-h-[76px] items-center justify-between gap-4 py-3 lg:flex-wrap lg:justify-center lg:gap-x-8 lg:gap-y-2 lg:py-4">
           <div className="hidden items-center gap-3 lg:flex">
             <a href={schoolContent.contact.phoneHref} className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-call-header"><Phone size={14} /> {schoolContent.contact.phone}</a>
             <Link href="/mandatory-disclosure" className="text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-disclosure-header">Mandatory Disclosure</Link>
           </div>
           <LogoMark compact />
-          <div className="ml-auto hidden items-center gap-3 lg:flex">
+          <div className="hidden items-center gap-3 lg:flex">
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[12px] font-semibold text-[#f8eedc]/75 hover:text-[#e3b45b]" data-testid="link-whatsapp-header"><MessageCircle size={14} /> WhatsApp</a>
             <Link href="/admissions" className="flex items-center gap-2 rounded-full bg-[#e3b45b] px-4 py-2.5 text-[12px] font-extrabold text-[#202337] transition-transform hover:-translate-y-0.5" data-testid="link-enquire-header">Enquire now <ArrowDownRight size={15} /></Link>
           </div>
