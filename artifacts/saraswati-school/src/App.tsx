@@ -273,6 +273,7 @@ function Home() {
               <span className="inline-flex items-center gap-2 rounded-full bg-[#202337] px-3 py-2 font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#e3b45b]"><span className="size-1.5 rounded-full bg-[#e3b45b]" /> {schoolContent.identity.board} School</span>
               <span className="inline-flex items-center gap-2 rounded-full border border-[#d95340]/30 bg-[#fff8ee]/50 px-3 py-2 font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#c94b35]"><span className="size-1.5 rounded-full bg-[#d95340]" /> Registration open</span>
                <span className="font-mono-school text-[10px] font-bold uppercase tracking-[.12em] text-[#202337]/50">Est. {schoolContent.identity.founded}</span>
+               <span className="rounded-full border border-[#202337]/12 bg-[#fff8ee]/75 px-3 py-2 text-xs font-bold text-[#202337]">Co-ed education</span>
             </div>
             <h1 className="max-w-3xl font-display text-[clamp(3.35rem,16vw,7.4rem)] font-bold leading-[.82] tracking-[-.06em] text-[#202337]">Where bright<br /><span className="text-[#c94b35]">beginnings</span><br />take root.</h1>
              <p className="mt-8 max-w-lg text-base leading-7 text-[#202337]/65 md:text-lg">{schoolContent.identity.name} is a place to be known, challenged and celebrated — right here in the heart of {schoolContent.identity.location}.</p>
