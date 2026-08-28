@@ -70,9 +70,10 @@ function LogoMark({ compact = false }: { compact?: boolean }) {
   return (
     <Link href="/" className={`flex items-center gap-3 group ${compact ? 'max-w-[220px]' : ''}`} data-testid="link-logo-home">
       <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-[#f8eedc] ring-2 ring-[#e3b45b]/50 shadow-sm transition-transform group-hover:rotate-3">
-        <img src={schoolLogo} alt={`${schoolContent.identity.shortName} School emblem`} className="size-full object-cover" />
+        <img src={schoolLogo} alt={`${schoolContent.identity.shortName} School emblem`} width="512" height="476" loading="eager" fetchPriority="high" decoding="async" className="size-full object-cover" />
       </span>
-      <span className="leading-tight">
+      <span className="min-w-0 leading-tight">
+        <span className="block font-mono-school text-[7px] font-bold uppercase tracking-[.1em] text-[#e3b45b]/75">{schoolContent.identity.management} · {schoolContent.identity.registration}</span>
         <span className="block font-display text-[1.45rem] font-bold tracking-tight text-[#f8eedc]">{schoolContent.identity.shortName}</span>
         <span className="block font-mono-school text-[8px] font-bold uppercase tracking-[.14em] text-[#e3b45b]">Primary English Medium School</span>
       </span>
@@ -224,6 +225,10 @@ function HomeGallery() {
   }, [isInteracting, isManuallyPaused]);
 
   const move = (direction: number) => setActive((current) => (current + direction + galleryItems.length) % galleryItems.length);
+  const toggleAutomaticRotation = () => {
+    if (isManuallyPaused) setIsInteracting(false);
+    setIsManuallyPaused((current) => !current);
+  };
   const item = galleryItems[active];
 
   return (
@@ -239,12 +244,12 @@ function HomeGallery() {
         if (!event.currentTarget.contains(event.relatedTarget)) setIsInteracting(false);
       }}
     >
-      <img key={item.src} src={item.src} alt={item.title} fetchPriority={active === 0 ? 'high' : 'auto'} decoding="async" className="absolute inset-0 size-full object-cover transition-opacity duration-500" data-testid="image-home-gallery" />
+      <img key={item.src} src={item.src} alt={item.title} loading={active === 0 ? 'eager' : 'lazy'} fetchPriority={active === 0 ? 'high' : 'auto'} decoding="async" className="absolute inset-0 size-full object-cover transition-opacity duration-500" data-testid="image-home-gallery" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#202337]/85 via-[#202337]/10 to-[#202337]/10" />
       <div className="absolute left-5 top-5 rounded-full bg-[#f8eedc]/90 px-3 py-2 font-mono-school text-[9px] font-bold uppercase tracking-[.14em] text-[#202337] md:left-7 md:top-7">
         <span data-testid="text-home-gallery-counter">{item.label} · {String(active + 1).padStart(2, '0')} / {String(galleryItems.length).padStart(2, '0')}</span>
       </div>
-      <button type="button" onClick={() => setIsManuallyPaused((current) => !current)} aria-pressed={isManuallyPaused} aria-label={isManuallyPaused ? 'Play automatic gallery rotation' : 'Pause automatic gallery rotation'} className="absolute right-5 top-5 grid size-10 place-items-center rounded-full border border-[#f8eedc]/35 bg-[#202337]/45 text-[#f8eedc] hover:bg-[#202337]/70 md:right-7 md:top-7" data-testid="button-home-gallery-pause">
+      <button type="button" onClick={toggleAutomaticRotation} aria-pressed={isManuallyPaused} aria-label={isManuallyPaused ? 'Play automatic gallery rotation' : 'Pause automatic gallery rotation'} className="absolute right-5 top-5 grid size-10 place-items-center rounded-full border border-[#f8eedc]/35 bg-[#202337]/45 text-[#f8eedc] hover:bg-[#202337]/70 md:right-7 md:top-7" data-testid="button-home-gallery-pause">
         {isManuallyPaused ? <Play size={16} fill="currentColor" /> : <Pause size={16} fill="currentColor" />}
       </button>
       <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4 text-[#f8eedc] md:inset-x-7 md:bottom-7">
@@ -354,7 +359,7 @@ function Academics() {
     <PageIntro eyebrow="The learning journey" title={<>Room to<br /><span className="text-[#e3b45b]">become.</span></>} copy="From first letters to future plans, our programmes meet children where they are and give them the right kind of stretch.">
       <Link href="/admissions" className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#e3b45b] hover:text-[#f8eedc]" data-testid="link-academics-enquire">Ask about a class <ArrowRight size={16} /></Link>
     </PageIntro>
-     <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="A clear path, a personal pace" title="Three chapters. One continuous curiosity." copy="Our age-wise programmes are connected by a shared language of care, high expectations and hands-on learning." /><div className="mt-14 grid gap-5 lg:grid-cols-3">{schoolContent.programmes.map((p) => <article key={p.num} className={`group relative min-h-[470px] overflow-hidden rounded-[2rem] p-7 ${programmeStyles[p.tone]} transition-transform hover:-translate-y-2`}><div className="flex items-start justify-between"><span className="font-mono-school text-[10px] font-bold opacity-60">{p.num}</span><span className="grid size-12 place-items-center rounded-2xl border border-current/20">{programmeIcons[p.icon]}</span></div><div className="absolute -right-14 top-24 size-48 rounded-full border-[30px] border-current opacity-10" /><div className="relative mt-28"><p className="font-mono-school text-[9px] font-bold uppercase tracking-[.14em] opacity-65">{p.ages}</p><h3 className="mt-3 font-display text-5xl font-bold leading-[.88]">{p.name}</h3><p className="mt-5 text-sm leading-6 opacity-75">{p.copy}</p><ul className="mt-7 grid gap-2 border-t border-current/20 pt-5 text-xs font-semibold">{p.points.map(point => <li key={point} className="flex items-center gap-2"><Check size={14} /> {point}</li>)}</ul></div></article>)}</div></div></section>
+      <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="A clear path, a personal pace" title="Four chapters. One continuous curiosity." copy="Our age-wise programmes are connected by a shared language of care, high expectations and hands-on learning." /><div className="mt-14 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">{schoolContent.programmes.map((p) => <article key={p.num} className={`group relative min-h-[470px] overflow-hidden rounded-[2rem] p-7 ${programmeStyles[p.tone]} transition-transform hover:-translate-y-2`}><div className="flex items-start justify-between"><span className="font-mono-school text-[10px] font-bold opacity-60">{p.num}</span><span className="grid size-12 place-items-center rounded-2xl border border-current/20">{programmeIcons[p.icon]}</span></div><div className="absolute -right-14 top-24 size-48 rounded-full border-[30px] border-current opacity-10" /><div className="relative mt-28"><p className="font-mono-school text-[9px] font-bold uppercase tracking-[.14em] opacity-65">{p.ages}</p><h3 className="mt-3 font-display text-5xl font-bold leading-[.88]">{p.name}</h3><p className="mt-5 text-sm leading-6 opacity-75">{p.copy}</p><ul className="mt-7 grid gap-2 border-t border-current/20 pt-5 text-xs font-semibold">{p.points.map(point => <li key={point} className="flex items-center gap-2"><Check size={14} /> {point}</li>)}</ul></div></article>)}</div></div></section>
     <section className="bg-[#f4e6c9] px-5 py-20 md:py-28"><div className="page-wrap grid gap-14 lg:grid-cols-[.7fr_1.3fr]"><SectionHeading eyebrow="Beyond the timetable" title="The habits that last." copy="We make space for the whole child: the thoughtful teammate, the expressive artist, the careful observer and the steady friend." /><div className="grid gap-3 sm:grid-cols-2">{[['01', 'English communication', 'Read deeply. Speak clearly. Listen generously.'], ['02', 'Creative expression', 'Music, dance, drawing and drama as daily languages.'], ['03', 'Scientific temper', 'Questions are welcome; evidence is even better.'], ['04', 'Community spirit', 'Service, celebration and responsibility close to home.']].map(([n, t, c]) => <div key={n} className="flex gap-5 border-b border-[#202337]/15 py-5"><span className="font-mono-school text-[10px] text-[#c94b35]">{n}</span><div><h3 className="font-bold text-[#202337]">{t}</h3><p className="mt-1 text-sm leading-6 text-[#202337]/60">{c}</p></div></div>)}</div></div></section>
     <section className="bg-[#202337] px-5 py-20 text-[#f8eedc]"><div className="page-wrap flex flex-col justify-between gap-8 md:flex-row md:items-end"><div><p className="font-mono-school text-[10px] uppercase tracking-[.18em] text-[#e3b45b]">Ready when you are</p><h2 className="mt-4 max-w-2xl font-display text-5xl font-bold leading-[.9] md:text-7xl">Find the right<br />starting point.</h2></div><Link href="/admissions" className="inline-flex items-center gap-2 rounded-full bg-[#e3b45b] px-5 py-3.5 text-sm font-extrabold text-[#202337]" data-testid="link-academics-cta">Explore admissions <ArrowRight size={16} /></Link></div></section>
   </>;
@@ -402,11 +407,20 @@ function Fees() {
 
 function Gallery() {
   const [active, setActive] = useState(0);
+  const [isInteracting, setIsInteracting] = useState(false);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isInteracting || prefersReducedMotion) return;
+    const timer = window.setInterval(() => setActive((current) => (current + 1) % galleryItems.length), 4800);
+    return () => window.clearInterval(timer);
+  }, [isInteracting]);
+
   const item = galleryItems[active];
-  const move = (direction: number) => setActive((active + direction + galleryItems.length) % galleryItems.length);
+  const move = (direction: number) => setActive((current) => (current + direction + galleryItems.length) % galleryItems.length);
   return <>
     <PageIntro eyebrow="A glimpse inside" title={<>Come see<br /><span className="text-[#d95340]">the feeling.</span></>} copy="A school is more than its walls. Take a small walk through the spaces, rituals and bright details that make Saraswati ours." />
-    <section className="bg-[#f4e6c9] px-5 py-16 md:py-24"><div className="page-wrap"><div className="relative overflow-hidden rounded-[2rem] bg-[#202337]"><div className="grid min-h-[500px] md:grid-cols-[1.35fr_.65fr]"><div className="relative min-h-[330px]"><img src={item.src} alt={item.title} decoding="async" className="absolute inset-0 size-full object-cover opacity-85" /><div className="absolute inset-0 bg-gradient-to-r from-[#202337]/35 to-transparent" /><div className="absolute bottom-6 left-6 flex items-center gap-2 rounded-full bg-[#f8eedc]/90 px-3 py-2 font-mono-school text-[9px] font-bold uppercase tracking-[.14em] text-[#202337] md:left-8"><span className="size-1.5 rounded-full bg-[#d95340]" /> {item.label}</div></div><div className="flex flex-col justify-between p-7 text-[#f8eedc] md:p-10"><div><span className="font-mono-school text-[10px] text-[#e3b45b]">{String(active + 1).padStart(2, '0')} / {String(galleryItems.length).padStart(2, '0')}</span><h2 className="mt-7 font-display text-5xl font-bold leading-[.88] md:text-6xl">{item.title}</h2><p className="mt-6 text-sm leading-6 text-[#f8eedc]/60">{item.text}</p></div><div className="mt-12 flex items-center justify-between"><div className="flex gap-2">{galleryItems.map((gallery, index) => <button type="button" key={gallery.title} onClick={() => setActive(index)} className={`h-1 rounded-full transition-all ${index === active ? 'w-10 bg-[#e3b45b]' : 'w-5 bg-[#f8eedc]/25'}`} aria-label={`Show ${gallery.title}`} data-testid={`button-gallery-dot-${index}`} />)}</div><div className="flex gap-2"><button type="button" onClick={() => move(-1)} className="grid size-11 place-items-center rounded-full border border-[#f8eedc]/20 hover:bg-[#f8eedc]/10" aria-label="Previous gallery image" data-testid="button-gallery-previous"><ChevronLeft size={18} /></button><button type="button" onClick={() => move(1)} className="grid size-11 place-items-center rounded-full bg-[#e3b45b] text-[#202337] hover:bg-[#f4c979]" aria-label="Next gallery image" data-testid="button-gallery-next"><ChevronRight size={18} /></button></div></div></div></div></div><div className="mt-14 grid gap-5 md:grid-cols-4">{galleryItems.map((gallery, index) => <button type="button" onClick={() => setActive(index)} key={gallery.title} className={`group text-left ${index === active ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`} data-testid={`button-gallery-card-${index}`}><div className="aspect-[1.35] overflow-hidden rounded-2xl bg-[#3b7f7c]"><img src={gallery.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-105" /></div><p className="mt-4 font-mono-school text-[10px] font-bold uppercase tracking-[.14em] text-[#c77a22]">{gallery.label}</p><p className="mt-2 font-display text-2xl font-bold text-[#202337]">{gallery.title}</p></button>)}</div></div></section>
+    <section className="bg-[#f4e6c9] px-5 py-16 md:py-24"><div className="page-wrap"><div className="relative overflow-hidden rounded-[2rem] bg-[#202337]" role="region" aria-roledescription="carousel" aria-label="Saraswati School gallery" onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} onFocusCapture={() => setIsInteracting(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setIsInteracting(false); }}><div className="grid min-h-[500px] md:grid-cols-[1.35fr_.65fr]"><div className="relative min-h-[330px]"><img key={item.src} src={item.src} alt={item.title} loading={active === 0 ? 'eager' : 'lazy'} fetchPriority={active === 0 ? 'high' : 'auto'} decoding="async" className="absolute inset-0 size-full object-cover opacity-85" /><div className="absolute inset-0 bg-gradient-to-r from-[#202337]/35 to-transparent" /><div className="absolute bottom-6 left-6 flex items-center gap-2 rounded-full bg-[#f8eedc]/90 px-3 py-2 font-mono-school text-[9px] font-bold uppercase tracking-[.14em] text-[#202337] md:left-8"><span className="size-1.5 rounded-full bg-[#d95340]" /> {item.label}</div></div><div className="flex flex-col justify-between p-7 text-[#f8eedc] md:p-10"><div><span className="font-mono-school text-[10px] text-[#e3b45b]">{String(active + 1).padStart(2, '0')} / {String(galleryItems.length).padStart(2, '0')}</span><h2 className="mt-7 font-display text-5xl font-bold leading-[.88] md:text-6xl">{item.title}</h2><p className="mt-6 text-sm leading-6 text-[#f8eedc]/60">{item.text}</p></div><div className="mt-12 flex items-center justify-between"><div className="flex gap-2">{galleryItems.map((gallery, index) => <button type="button" key={gallery.title} onClick={() => setActive(index)} className={`h-1 rounded-full transition-all ${index === active ? 'w-10 bg-[#e3b45b]' : 'w-5 bg-[#f8eedc]/25'}`} aria-label={`Show ${gallery.title}`} data-testid={`button-gallery-dot-${index}`} />)}</div><div className="flex gap-2"><button type="button" onClick={() => move(-1)} className="grid size-11 place-items-center rounded-full border border-[#f8eedc]/20 hover:bg-[#f8eedc]/10" aria-label="Previous gallery image" data-testid="button-gallery-previous"><ChevronLeft size={18} /></button><button type="button" onClick={() => move(1)} className="grid size-11 place-items-center rounded-full bg-[#e3b45b] text-[#202337] hover:bg-[#f4c979]" aria-label="Next gallery image" data-testid="button-gallery-next"><ChevronRight size={18} /></button></div></div></div></div></div><div className="mt-14 grid gap-5 md:grid-cols-4">{galleryItems.map((gallery, index) => <button type="button" onClick={() => setActive(index)} key={gallery.title} className={`group text-left ${index === active ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`} data-testid={`button-gallery-card-${index}`}><div className="aspect-[1.35] overflow-hidden rounded-2xl bg-[#3b7f7c]"><img src={gallery.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-105" /></div><p className="mt-4 font-mono-school text-[10px] font-bold uppercase tracking-[.14em] text-[#c77a22]">{gallery.label}</p><p className="mt-2 font-display text-2xl font-bold text-[#202337]">{gallery.title}</p></button>)}</div></div></section>
   </>;
 }
 
@@ -428,9 +442,37 @@ function MandatoryDisclosure() {
   return <>
      <PageIntro eyebrow="For transparency" title={<>Mandatory<br /><span className="text-[#e3b45b]">Disclosure.</span></>} copy="Important school information, shared clearly for families and the wider school community." />
      <section className="bg-[#f4e6c9] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="B · Documents and information" title="School records, ready to view." copy="Published documents are managed by the school office. Any record without an uploaded PDF remains marked as pending." /><div className="mt-12 grid gap-12">{documentSections.map(section => <DisclosureDocumentSection key={section.code} section={section} />)}</div></div></section>
+      <AnnualAcademicCalendar />
      <section className="bg-[#f8eedc] px-5 py-20 md:py-28"><div className="page-wrap"><SectionHeading eyebrow="Information" title="The essentials, in one place." copy={`${schoolContent.identity.name} is a ${schoolContent.identity.board} school managed by the ${schoolContent.identity.management}.`} /><div className="mt-12 grid gap-10">{schoolContent.mandatoryDisclosure.sections.map(section => <DisclosureSection key={section.title} title={section.title} rows={section.rows} />)}</div></div></section>
      <section className="bg-[#3b7f7c] px-5 py-20 text-[#f8eedc]"><div className="page-wrap grid gap-8 md:grid-cols-3">{schoolContent.disclosureHighlights.map(([title, copy]) => <div key={title} className="border-t border-[#f8eedc]/25 pt-5"><p className="font-mono-school text-[10px] uppercase tracking-[.14em] text-[#e3b45b]">{title}</p><p className="mt-5 font-display text-3xl font-bold leading-none">{copy}</p></div>)}</div></section>
   </>;
+}
+
+function AnnualAcademicCalendar() {
+  const { academicCalendar } = schoolContent.mandatoryDisclosure;
+  return (
+    <section className="bg-[#e3b45b] px-5 py-20 md:py-28" aria-labelledby="annual-academic-calendar">
+      <div className="page-wrap">
+        <SectionHeading eyebrow="Annual academic calendar" title={academicCalendar.title} copy={academicCalendar.copy} />
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
+          {academicCalendar.documents.map((document, index) => (
+            <article key={document.title} className="rounded-[1.7rem] bg-[#f8eedc] p-6 text-[#202337]">
+              <div className="flex items-start justify-between gap-4">
+                <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#202337] text-[#e3b45b]"><CalendarDays size={18} /></span>
+                <span className="font-mono-school text-[10px] font-bold text-[#c94b35]">{String(index + 1).padStart(2, '0')}</span>
+              </div>
+              <h2 id={index === 0 ? 'annual-academic-calendar' : undefined} className="mt-8 font-display text-3xl font-bold leading-none">{document.title}</h2>
+              <p className="mt-3 min-h-12 text-sm leading-6 text-[#202337]/60">{document.description}</p>
+              <div className="mt-6 border-t border-[#202337]/10 pt-4">
+                <p className="mb-1 font-mono-school text-[9px] font-bold uppercase tracking-[.1em] text-[#c77a22]">Uploaded document link (PDF)</p>
+                <DocumentLink document={document} index={index} section="Calendar" />
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 type DisclosureDocumentSectionData = { code: string; title: string; documents: readonly { title: string; file: string }[] };
@@ -444,7 +486,16 @@ function DocumentLink({ document, index, section }: { document: { title: string;
 }
 
 function DisclosureSection({ title, rows }: { title: string; rows: readonly (readonly [string, string])[] }) {
-  return <section aria-labelledby={`disclosure-${title.toLowerCase().replace(/\s+/g, '-')}`}><h2 id={`disclosure-${title.toLowerCase().replace(/\s+/g, '-')}`} className="font-display text-4xl font-bold text-[#202337] md:text-5xl">{title}</h2><div className="mt-6 hidden overflow-hidden rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9] md:block"><table className="w-full border-collapse text-left"><thead><tr className="border-b border-[#202337]/15 bg-[#202337] font-mono-school text-[10px] uppercase tracking-[.12em] text-[#f8eedc]"><th className="w-20 px-5 py-4">Sr. No.</th><th className="px-5 py-4">Document / Information</th><th className="px-5 py-4">Details</th></tr></thead><tbody>{rows.map(([label, detail], index) => <tr key={label} className="border-b border-[#202337]/10 last:border-0"><td className="px-5 py-4 font-mono-school text-xs text-[#c77a22]">{index + 1}</td><th scope="row" className="px-5 py-4 text-sm font-bold text-[#202337]">{label}</th><td className="px-5 py-4 text-sm leading-6 text-[#202337]/70">{detail}</td></tr>)}</tbody></table></div><div className="mt-6 grid gap-3 md:hidden">{rows.map(([label, detail], index) => <div key={label} className="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-2xl border border-[#202337]/10 bg-[#f4e6c9] p-4"><span className="font-mono-school text-[10px] font-bold text-[#c77a22]">{String(index + 1).padStart(2, '0')}</span><div className="min-w-0"><p className="font-mono-school text-[10px] font-bold uppercase leading-4 tracking-[.06em] text-[#202337]">{label}</p><p className="mt-1 break-words text-sm font-semibold leading-6 text-[#202337]/75">{detail}</p></div></div>)}</div></section>;
+  return <section aria-labelledby={`disclosure-${title.toLowerCase().replace(/\s+/g, '-')}`}><h2 id={`disclosure-${title.toLowerCase().replace(/\s+/g, '-')}`} className="font-display text-4xl font-bold text-[#202337] md:text-5xl">{title}</h2><div className="mt-6 hidden overflow-hidden rounded-[1.7rem] border border-[#202337]/12 bg-[#f4e6c9] md:block"><table className="w-full border-collapse text-left"><thead><tr className="border-b border-[#202337]/15 bg-[#202337] font-mono-school text-[10px] uppercase tracking-[.12em] text-[#f8eedc]"><th className="w-20 px-5 py-4">Sr. No.</th><th className="px-5 py-4">Document / Information</th><th className="px-5 py-4">Details</th></tr></thead><tbody>{rows.map(([label, detail], index) => <tr key={label} className="border-b border-[#202337]/10 last:border-0"><td className="px-5 py-4 font-mono-school text-xs text-[#c77a22]">{index + 1}</td><th scope="row" className="px-5 py-4 text-sm font-bold text-[#202337]">{label}</th><td className="px-5 py-4 text-sm leading-6 text-[#202337]/70"><DisclosureDetail label={label} detail={detail} /></td></tr>)}</tbody></table></div><div className="mt-6 grid gap-3 md:hidden">{rows.map(([label, detail], index) => <div key={label} className="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-2xl border border-[#202337]/10 bg-[#f4e6c9] p-4"><span className="font-mono-school text-[10px] font-bold text-[#c77a22]">{String(index + 1).padStart(2, '0')}</span><div className="min-w-0"><p className="font-mono-school text-[10px] font-bold uppercase leading-4 tracking-[.06em] text-[#202337]">{label}</p><p className="mt-1 break-words text-sm font-semibold leading-6 text-[#202337]/75"><DisclosureDetail label={label} detail={detail} /></p></div></div>)}</div></section>;
+}
+
+function DisclosureDetail({ label, detail }: { label: string; detail: string }) {
+  if (label !== '8. CBSE Inspection Video') return detail;
+  return detail ? (
+    <a href={detail} target="_blank" rel="noopener noreferrer" className="font-bold text-[#3b5794] underline decoration-1 underline-offset-2 hover:text-[#c94b35]">View inspection video</a>
+  ) : (
+    <span className="inline-block min-h-5 min-w-44 border-b border-[#202337]/25" aria-label="CBSE inspection video link space">&nbsp;</span>
+  );
 }
 
 function DirectionPage({ page }: { page: 'vision' | 'mission' }) {
