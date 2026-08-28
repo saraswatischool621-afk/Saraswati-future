@@ -215,7 +215,7 @@ export const schoolContent = {
       {
         title: 'General Information',
         rows: [
-          ['Name Of The School', 'Saraswati Primary English Medium school'],
+          ['Name Of The School', 'Lewa Educational Union, Reg. No. A-410, Jalgaon — Saraswati Primary English Medium School'],
           ['Affiliation number', '----------'],
           ['School Udise Code', '27031602133'],
           ['Address', 'P-52, Ajintha Road, Near Lokmat Office, MIDC, Jalgaon'],

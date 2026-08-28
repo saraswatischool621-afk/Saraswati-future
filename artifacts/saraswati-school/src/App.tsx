@@ -26,8 +26,6 @@ import {
   Menu,
   Music2,
   Phone,
-  Pause,
-  Play,
   Quote,
   School,
   Send,
@@ -43,6 +41,7 @@ const whatsappNumber = schoolContent.contact.whatsappNumber;
 const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(schoolContent.contact.whatsappGreeting)}`;
 const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(schoolAddress)}`;
 const galleryItems = schoolContent.gallery;
+const GALLERY_AUTOPLAY_INTERVAL = 4000;
 
 const facilityIcons = {
   flask: <FlaskConical />,
@@ -214,21 +213,16 @@ function SectionHeading({ eyebrow, title, copy, light = false }: { eyebrow: stri
 
 function HomeGallery() {
   const [active, setActive] = useState(0);
-  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (isManuallyPaused || isInteracting || prefersReducedMotion) return;
-    const timer = window.setInterval(() => setActive((current) => (current + 1) % galleryItems.length), 4800);
+    if (isInteracting || prefersReducedMotion) return;
+    const timer = window.setInterval(() => setActive((current) => (current + 1) % galleryItems.length), GALLERY_AUTOPLAY_INTERVAL);
     return () => window.clearInterval(timer);
-  }, [isInteracting, isManuallyPaused]);
+  }, [isInteracting]);
 
   const move = (direction: number) => setActive((current) => (current + direction + galleryItems.length) % galleryItems.length);
-  const toggleAutomaticRotation = () => {
-    if (isManuallyPaused) setIsInteracting(false);
-    setIsManuallyPaused((current) => !current);
-  };
   const item = galleryItems[active];
 
   return (
@@ -249,9 +243,6 @@ function HomeGallery() {
       <div className="absolute left-5 top-5 rounded-full bg-[#f8eedc]/90 px-3 py-2 font-mono-school text-[9px] font-bold uppercase tracking-[.14em] text-[#202337] md:left-7 md:top-7">
         <span data-testid="text-home-gallery-counter">{item.label} · {String(active + 1).padStart(2, '0')} / {String(galleryItems.length).padStart(2, '0')}</span>
       </div>
-      <button type="button" onClick={toggleAutomaticRotation} aria-pressed={isManuallyPaused} aria-label={isManuallyPaused ? 'Play automatic gallery rotation' : 'Pause automatic gallery rotation'} className="absolute right-5 top-5 grid size-10 place-items-center rounded-full border border-[#f8eedc]/35 bg-[#202337]/45 text-[#f8eedc] hover:bg-[#202337]/70 md:right-7 md:top-7" data-testid="button-home-gallery-pause">
-        {isManuallyPaused ? <Play size={16} fill="currentColor" /> : <Pause size={16} fill="currentColor" />}
-      </button>
       <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4 text-[#f8eedc] md:inset-x-7 md:bottom-7">
         <div className="max-w-[70%]">
           <p className="font-mono-school text-[9px] uppercase tracking-[.17em] text-[#e3b45b]">Life at Saraswati</p>
@@ -412,7 +403,7 @@ function Gallery() {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (isInteracting || prefersReducedMotion) return;
-    const timer = window.setInterval(() => setActive((current) => (current + 1) % galleryItems.length), 4800);
+    const timer = window.setInterval(() => setActive((current) => (current + 1) % galleryItems.length), GALLERY_AUTOPLAY_INTERVAL);
     return () => window.clearInterval(timer);
   }, [isInteracting]);
 
