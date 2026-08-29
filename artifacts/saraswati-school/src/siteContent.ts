@@ -180,6 +180,9 @@ export const schoolContent = {
     { src: '/gallery/cultural-performance.webp', title: 'Every voice belongs on stage', label: 'Cultural programme', text: 'Music and dance give young learners a confident language for expression.' },
     { src: '/gallery/sports-day.webp', title: 'Play is part of growing', label: 'Sports & games', text: 'Outdoor activity builds balance, friendship and a love of moving well.' },
     { src: '/gallery/team-spirit.webp', title: 'Team spirit, brightly expressed', label: 'School community', text: 'Shared celebration, active play and a proud sense of belonging.' },
+    { src: '/gallery/teachers-award.webp', title: 'The people who make it possible', label: 'Our teachers', text: 'Our dedicated educators celebrate every milestone and help each learner find their confidence.' },
+    { src: '/gallery/learning-exhibition.webp', title: 'Curiosity on display', label: 'Learning in action', text: 'Hands-on projects turn classroom questions into bright, memorable discoveries.' },
+    { src: '/gallery/school-trip.webp', title: 'Learning beyond the classroom', label: 'School journeys', text: 'Shared experiences outside school build wonder, friendship and stories to carry home.' },
   ],
 
   mandatoryDisclosure: {
