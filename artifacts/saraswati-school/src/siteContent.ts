@@ -183,6 +183,9 @@ export const schoolContent = {
     { src: '/gallery/teachers-award.webp', title: 'The people who make it possible', label: 'Our teachers', text: 'Our dedicated educators celebrate every milestone and help each learner find their confidence.' },
     { src: '/gallery/learning-exhibition.webp', title: 'Curiosity on display', label: 'Learning in action', text: 'Hands-on projects turn classroom questions into bright, memorable discoveries.' },
     { src: '/gallery/school-trip.webp', title: 'Learning beyond the classroom', label: 'School journeys', text: 'Shared experiences outside school build wonder, friendship and stories to carry home.' },
+    { src: '/gallery/independence-day.webp', title: 'Learning together, celebrating together', label: 'Independence Day', text: 'A joyful school gathering brings students, teachers and families together in shared pride.' },
+    { src: '/gallery/teachers-recognition.webp', title: 'Celebrating the people who guide us', label: 'Teacher recognition', text: 'Our educators celebrate their achievements and the care they bring to every classroom.' },
+    { src: '/gallery/back-to-school.webp', title: 'A bright welcome back', label: 'Back to school', text: 'Young learners begin a new chapter with joyful activities, warm welcomes and curious minds.' },
   ],
 
   mandatoryDisclosure: {
@@ -215,6 +218,7 @@ export const schoolContent = {
     ],
     sections: [
       {
+        code: 'A',
         title: 'General Information',
         rows: [
           ['Name Of The School', "Lewa Educational Union's ( Regd.No. A-410) — Saraswati Primary English Medium School"],
@@ -228,6 +232,7 @@ export const schoolContent = {
         ],
       },
       {
+        code: 'D',
         title: 'Staff (Teaching)',
         rows: [
           ['Principal', 'Mr. David Dass'],
@@ -241,7 +246,8 @@ export const schoolContent = {
         ],
       },
       {
-        title: 'Campus Details',
+        code: 'E',
+        title: 'School Infrastructure',
         rows: [
           ['Total Campus Area Of School', '5949 sq. meter'],
           ['Number And Size Of The Classrooms', '27 rooms, 50.51 sq meter each'],
