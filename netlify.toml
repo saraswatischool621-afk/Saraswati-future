@@ -1,0 +1,3 @@
+[build]
+command = "pnpm --filter @workspace/mockup-sandbox... run build"
+publish = "artifacts/mockup-sandbox/dist"
