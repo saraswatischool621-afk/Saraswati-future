@@ -487,7 +487,7 @@ function DisclosureDocumentSection({ section }: { section: DisclosureDocumentSec
 }
 
 function DocumentLink({ document, index, section }: { document: { title: string; file: string }; index: number; section: string }) {
-  return document.file ? <a href={document.file} target="_blank" rel="noopener noreferrer" className="font-bold uppercase text-[#3b5794] underline decoration-1 underline-offset-2 hover:text-[#c94b35]" data-testid={`link-disclosure-pdf-${section}-${index}`}>[View PDF]</a> : <span className="font-bold uppercase text-[#202337]/40" data-testid={`status-disclosure-pdf-${section}-${index}`}>[PDF pending]</span>;
+  return document.file ? <span className="flex flex-wrap gap-x-4 gap-y-2"><a href={document.file} target="_blank" rel="noopener noreferrer" className="font-bold uppercase text-[#3b5794] underline decoration-1 underline-offset-2 hover:text-[#c94b35]" data-testid={`link-disclosure-pdf-${section}-${index}`}>[View PDF]</a><a href={document.file} download className="font-bold uppercase text-[#3b5794] underline decoration-1 underline-offset-2 hover:text-[#c94b35]" data-testid={`download-disclosure-pdf-${section}-${index}`}>[Download]</a></span> : <span className="font-bold uppercase text-[#202337]/40" data-testid={`status-disclosure-pdf-${section}-${index}`}>[PDF pending]</span>;
 }
 
 type DisclosureTableSectionData = { code: string; title: string; rows: readonly (readonly [string, string])[] };
