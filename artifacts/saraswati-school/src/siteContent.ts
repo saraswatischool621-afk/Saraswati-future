@@ -195,13 +195,28 @@ export const schoolContent = {
         title: 'Documents And Information',
         documents: [
           { title: 'Copies Of Affiliation / Extension Letter And Recent Extension Of Affiliation, If Any', file: '' },
-          { title: 'Copies Of Societies / Trust / Company Registration / Renewal Certificate, As Applicable', file: '/documents/society-registration-certificate.pdf' },
+          { title: 'Copies Of Societies / Trust / Company Registration / Renewal Certificate, As Applicable', file: '/documents/trust-registration-certificate.pdf' },
           { title: 'Copy Of No Objection Certificate (NOC) Issued, If Applicable, By The State Govt. / UT', file: '' },
           { title: "Copies Of Recognition Certificate Under RTE Act, 2009, And It's Renewal If Applicable", file: '/documents/rte-recognition-certificate.pdf' },
-          { title: 'Copy Of Valid Building Safety Certificate As Per The National Building Code', file: '' },
-          { title: 'Copy Of Valid Fire Safety Certificate Issued By The Competent Authority', file: '' },
-          { title: 'Copy Of The DEO Certificate Submitted By The School For Affiliation / Extension / Upgradation Or Self Certification By School', file: '' },
-          { title: 'Copies Of Valid Water, Health And Sanitation Certificates', file: '/documents/sanitation-certificate.pdf' },
+          { title: 'Copy Of Valid Building Safety Certificate As Per The National Building Code', file: '/documents/building-safety-certificate.pdf' },
+          { title: 'Copy Of Valid Fire Safety Certificate Issued By The Competent Authority', file: '/documents/fire-safety-certificate.pdf' },
+          {
+            title: 'COPY OF THE SELF CERTIFICATION SUBMITTED BY THE SCHOOL FOR AFFILIATION/UPGRADATION/EXTENSION OF AFFILIATION*',
+            file: '',
+            files: [
+              { file: '/documents/self-certification.pdf', label: 'Self Certification' },
+              { file: '/documents/self-certification-affiliation.pdf', label: 'Affiliation Self Certification' },
+            ],
+          },
+          {
+            title: 'Copies Of Valid Water, Health And Sanitation Certificates',
+            file: '',
+            files: [
+              { file: '/documents/water-testing-report.pdf', label: 'Water Testing Report' },
+              { file: '/documents/water-and-sanitation-certificate.pdf', label: 'Water And Sanitation Certificate' },
+              { file: '/documents/sanitation-certificate.pdf', label: 'Sanitation Certificate' },
+            ],
+          },
         ],
       },
       {
@@ -209,9 +224,9 @@ export const schoolContent = {
         title: 'Result And Academics',
         documents: [
           { title: 'Fee Structure Of The School', file: '/documents/fee-structure-2026-27.pdf' },
-          { title: 'Annual Academic Calendar', file: '' },
-          { title: 'List Of School Management Committee (SMC)', file: '' },
-          { title: 'List Of Parents Teachers Association (PTA) Members', file: '' },
+          { title: 'Annual Academic Calendar', file: '/documents/annual-calendar-2026-27.pdf' },
+          { title: 'List Of School Management Committee (SMC)', file: '/documents/list-of-smc.pdf' },
+          { title: 'List Of Parents Teachers Association (PTA) Members', file: '/documents/list-of-pta-members.pdf' },
           { title: 'Last Three-Year Result Of The Board Examination As Per Applicability', file: '' },
         ],
       },
