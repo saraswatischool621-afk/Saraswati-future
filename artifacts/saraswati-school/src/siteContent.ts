@@ -204,7 +204,6 @@ export const schoolContent = {
             title: 'Copy Of The Self Certification Submitted By School For Affiliation/Upgradation/Extension Of Affiliation',
             file: '',
             files: [
-              { file: '/documents/self-certification.pdf', label: 'Self Certification' },
               { file: '/documents/self-certification-affiliation.pdf', label: 'Affiliation Self Certification' },
             ],
           },
@@ -214,7 +213,6 @@ export const schoolContent = {
             files: [
               { file: '/documents/water-testing-report.pdf', label: 'Water Testing Report' },
               { file: '/documents/water-and-sanitation-certificate.pdf', label: 'Water And Sanitation Certificate' },
-              { file: '/documents/sanitation-certificate.pdf', label: 'Sanitation Certificate' },
             ],
           },
         ],
