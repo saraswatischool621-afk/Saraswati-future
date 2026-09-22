@@ -201,7 +201,7 @@ export const schoolContent = {
           { title: 'Copy Of Valid Building Safety Certificate As Per The National Building Code', file: '/documents/building-safety-certificate.pdf' },
           { title: 'Copy Of Valid Fire Safety Certificate Issued By The Competent Authority', file: '/documents/fire-safety-certificate.pdf' },
           {
-            title: 'COPY OF THE SELF CERTIFICATION SUBMITTED BY THE SCHOOL FOR AFFILIATION/UPGRADATION/EXTENSION OF AFFILIATION*',
+            title: 'Copy Of The Self Certification Submitted By School For Affiliation/Upgradation/Extension Of Affiliation',
             file: '',
             files: [
               { file: '/documents/self-certification.pdf', label: 'Self Certification' },
